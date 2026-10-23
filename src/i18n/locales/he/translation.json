@@ -673,7 +673,23 @@
     "modelLoadFailedUnknown": "מודל לא ידוע",
     "pasteFailedTitle": "ההדבקה נכשלה",
     "pasteFailed": "לא ניתן היה להדביק את הטקסט ביישום הפעיל.",
-    "transcriptionFailedTitle": "התמלול נכשל"
+    "transcriptionFailedTitle": "התמלול נכשל",
+    "aiFallbackTitle": "The AI step failed - pasted your raw transcription",
+    "aiFallback": {
+      "not_configured": "Choose a provider, model and API key in the AI settings.",
+      "timeout": "The provider took longer than 20 seconds to answer.",
+      "network": "Could not reach the provider. Check your internet connection.",
+      "auth": "The API key is missing or invalid.",
+      "rate_limited": "Too many requests or quota exceeded.",
+      "server": "The provider had an internal error. Try again.",
+      "bad_request": "The provider rejected the request (check the model name).",
+      "invalid_response": "The provider sent an unexpected response.",
+      "empty": "The AI returned an empty answer.",
+      "truncated": "The AI answer was cut off.",
+      "unknown": "Unknown error.",
+      "local_not_installed": "Download the local AI in the AI settings first.",
+      "local_failed": "The local AI could not start."
+    }
   },
   "appLanguage": {
     "title": "שפת האפליקציה",
@@ -706,5 +722,13 @@
     "learnMore": "איך לתקן את זה",
     "recorderBlocked": "לא ניתן להקליט קיצורים כרגע — Secure Input של macOS חוסם אירועי מקשים. פתור תחילה את אזהרת Secure Input.",
     "dismiss": "התעלם"
+  },
+  "vozprompt": {
+    "local": {
+      "description": "Runs a small AI on your computer (about 1.1 GB, downloaded once). No internet and no API key needed.",
+      "download": "Download local AI",
+      "downloading": "Downloading... {{percent}}%",
+      "ready": "Local AI is ready."
+    }
   }
 }

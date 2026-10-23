@@ -673,7 +673,23 @@
     "modelLoadFailedUnknown": "modelo desconhecido",
     "pasteFailedTitle": "Falha ao colar o texto",
     "pasteFailed": "Não foi possível colar o texto no aplicativo ativo.",
-    "transcriptionFailedTitle": "Falha na transcrição"
+    "transcriptionFailedTitle": "Falha na transcrição",
+    "aiFallbackTitle": "A IA falhou - colei a transcrição original",
+    "aiFallback": {
+      "not_configured": "Escolha provedor, modelo e chave de API nas configurações de IA.",
+      "timeout": "O provedor demorou mais de 20 segundos para responder.",
+      "network": "Não consegui falar com o provedor. Verifique sua internet.",
+      "auth": "A chave de API está ausente ou inválida.",
+      "rate_limited": "Muitas requisições ou cota esgotada.",
+      "server": "O provedor teve um erro interno. Tente de novo.",
+      "bad_request": "O provedor recusou o pedido (confira o nome do modelo).",
+      "invalid_response": "O provedor enviou uma resposta inesperada.",
+      "empty": "A IA devolveu uma resposta vazia.",
+      "truncated": "A resposta da IA veio cortada.",
+      "unknown": "Erro desconhecido.",
+      "local_not_installed": "Baixe a IA local nas configurações de IA primeiro.",
+      "local_failed": "Não consegui iniciar a IA local."
+    }
   },
   "appLanguage": {
     "title": "Idioma da Aplicação",
@@ -706,5 +722,13 @@
     "learnMore": "Como resolver isso",
     "recorderBlocked": "Não é possível gravar atalhos agora — o Secure Input do macOS está bloqueando os eventos de tecla. Resolva primeiro o aviso do Secure Input.",
     "dismiss": "Dispensar"
+  },
+  "vozprompt": {
+    "local": {
+      "description": "Roda uma IA pequena no seu computador (cerca de 1,1 GB, baixada uma vez). Não precisa de internet nem de chave de API.",
+      "download": "Baixar IA local",
+      "downloading": "Baixando... {{percent}}%",
+      "ready": "A IA local está pronta."
+    }
   }
 }

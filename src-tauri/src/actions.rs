@@ -8,7 +8,9 @@ use crate::managers::model::ModelManager;
 use crate::managers::transcription::policy::{live_decode, LiveDecode, ModelTraits};
 use crate::managers::transcription::StreamWorkKind;
 use crate::managers::transcription::TranscriptionManager;
-use crate::settings::{get_settings, AppSettings, OverlayStyle, APPLE_INTELLIGENCE_PROVIDER_ID};
+use crate::settings::{
+    get_settings, AppSettings, OverlayStyle, PostProcessApiFormat, APPLE_INTELLIGENCE_PROVIDER_ID,
+};
 use crate::shortcut;
 use crate::tray::{set_tray_state, TrayIconState};
 use crate::utils::{
@@ -125,6 +127,70 @@ fn should_use_streaming_overlay(style: OverlayStyle, is_streaming: bool) -> bool
     style == OverlayStyle::Live && is_streaming
 }
 
+/// Modo Prompt: usa o pipeline do `vozprompt-core` (timeout de 20 s). Em qualquer falha devolve
+/// `None` (o chamador cola a transcricao bruta) e avisa o usuario pelo evento `post-process-error`.
+async fn post_process_vozprompt(
+    app: &AppHandle,
+    settings: &AppSettings,
+    transcription: &str,
+) -> Option<String> {
+    use vozprompt_core::pipeline::{process, AI_TIMEOUT};
+    use vozprompt_core::provider::{ApiFormat, ProviderConfig, ReqwestTransport};
+    use vozprompt_core::templates::TemplateLibrary;
+
+    let fail = |code: &str| {
+        let _ = app.emit("post-process-error", code.to_string());
+        None
+    };
+    let Some(provider) = settings.active_post_process_provider() else {
+        return fail("not_configured");
+    };
+    if provider.id == crate::vozprompt_local::LOCAL_PROVIDER_ID {
+        if let Err(e) = crate::vozprompt_local::ensure_running(app).await {
+            error!("Local AI unavailable: {e}");
+            return fail(if e == "local_not_installed" { "local_not_installed" } else { "local_failed" });
+        }
+    }
+    let template = settings
+        .post_process_selected_prompt_id
+        .as_ref()
+        .and_then(|id| settings.post_process_prompts.iter().find(|p| &p.id == id))
+        .or_else(|| settings.post_process_prompts.first())
+        .map(|p| p.prompt.replace("${output}", vozprompt_core::template::TRANSCRIPT_VAR))
+        .unwrap_or_else(|| TemplateLibrary::default().templates[0].prompt.clone());
+    let cfg = ProviderConfig {
+        base_url: provider.base_url.clone(),
+        format: match provider.api_format {
+            PostProcessApiFormat::OpenAi => ApiFormat::OpenAi,
+            PostProcessApiFormat::Anthropic => ApiFormat::Anthropic,
+        },
+        api_key: settings
+            .post_process_api_keys
+            .get(&provider.id)
+            .cloned()
+            .unwrap_or_default(),
+        model: settings
+            .post_process_models
+            .get(&provider.id)
+            .cloned()
+            .unwrap_or_default(),
+    };
+    let outcome = process(
+        &ReqwestTransport::new(AI_TIMEOUT),
+        &cfg,
+        &template,
+        transcription,
+        AI_TIMEOUT,
+    )
+    .await;
+    if let Some(err) = &outcome.error {
+        error!("Prompt mode failed ({}); pasting the raw transcription", err.code());
+        return fail(err.code());
+    }
+    outcome.ai_text
+}
+
+#[cfg_attr(not(all(target_os = "macos", target_arch = "aarch64")), allow(dead_code))]
 async fn post_process_transcription(settings: &AppSettings, transcription: &str) -> Option<String> {
     if is_blank_transcription(transcription) {
         debug!("Post-processing skipped because the transcription is empty");
@@ -368,7 +434,13 @@ pub(crate) async fn process_transcription_output(
     let mut post_process_prompt: Option<String> = None;
 
     if post_process {
-        if let Some(processed_text) = post_process_transcription(&settings, &final_text).await {
+        let is_apple = settings.post_process_provider_id == APPLE_INTELLIGENCE_PROVIDER_ID;
+        let processed = if is_apple {
+            post_process_transcription(&settings, &final_text).await
+        } else {
+            post_process_vozprompt(app, &settings, &final_text).await
+        };
+        if let Some(processed_text) = processed {
             post_processed_text = Some(processed_text.clone());
             final_text = processed_text;
 

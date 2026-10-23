@@ -202,6 +202,20 @@ function App() {
     };
   }, [t]);
 
+  // A IA falhou no modo Prompt: a transcricao bruta foi colada; explica o motivo.
+  useEffect(() => {
+    const unlisten = listen<string>("post-process-error", (event) => {
+      toast.error(t("errors.aiFallbackTitle"), {
+        description: t(`errors.aiFallback.${event.payload}`, {
+          defaultValue: t("errors.aiFallback.unknown"),
+        }),
+      });
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [t]);
+
   // Listen for model loading failures and show a toast
   useEffect(() => {
     const unlisten = listen<ModelStateEvent>("model-state-changed", (event) => {

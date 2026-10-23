@@ -673,7 +673,23 @@
     "modelLoadFailedUnknown": "不明なモデル",
     "pasteFailedTitle": "テキストの貼り付けに失敗しました",
     "pasteFailed": "アクティブなアプリにテキストを貼り付けられませんでした。",
-    "transcriptionFailedTitle": "文字起こしに失敗しました"
+    "transcriptionFailedTitle": "文字起こしに失敗しました",
+    "aiFallbackTitle": "The AI step failed - pasted your raw transcription",
+    "aiFallback": {
+      "not_configured": "Choose a provider, model and API key in the AI settings.",
+      "timeout": "The provider took longer than 20 seconds to answer.",
+      "network": "Could not reach the provider. Check your internet connection.",
+      "auth": "The API key is missing or invalid.",
+      "rate_limited": "Too many requests or quota exceeded.",
+      "server": "The provider had an internal error. Try again.",
+      "bad_request": "The provider rejected the request (check the model name).",
+      "invalid_response": "The provider sent an unexpected response.",
+      "empty": "The AI returned an empty answer.",
+      "truncated": "The AI answer was cut off.",
+      "unknown": "Unknown error.",
+      "local_not_installed": "Download the local AI in the AI settings first.",
+      "local_failed": "The local AI could not start."
+    }
   },
   "appLanguage": {
     "title": "アプリの言語",
@@ -706,5 +722,13 @@
     "learnMore": "解決方法",
     "recorderBlocked": "現在ショートカットを記録できません。macOS の Secure Input がキーイベントをブロックしています。先に Secure Input の警告を解消してください。",
     "dismiss": "閉じる"
+  },
+  "vozprompt": {
+    "local": {
+      "description": "Runs a small AI on your computer (about 1.1 GB, downloaded once). No internet and no API key needed.",
+      "download": "Download local AI",
+      "downloading": "Downloading... {{percent}}%",
+      "ready": "Local AI is ready."
+    }
   }
 }
