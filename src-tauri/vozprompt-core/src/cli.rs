@@ -146,6 +146,10 @@ fn parse(id: &str, raw: &str) -> Result<String, &'static str> {
     Ok(text.to_string())
 }
 
+/// Limites de entrada (o texto vai por stdin, entao nao ha limite de linha de comando).
+const MAX_TRANSCRIPT_BYTES: usize = 500_000;
+const MAX_TEMPLATE_BYTES: usize = 200_000;
+
 pub async fn generate(
     id: &str,
     selected_model: &str,
@@ -155,7 +159,7 @@ pub async fn generate(
     if model(id) != Some(selected_model) {
         return Err("cli_invalid_model");
     }
-    if transcript.trim().is_empty() || transcript.len() > 32_000 || template.len() > 24_000 {
+    if transcript.len() > MAX_TRANSCRIPT_BYTES || template.len() > MAX_TEMPLATE_BYTES {
         return Err("cli_input_limit");
     }
     let dir = tempfile::Builder::new()
@@ -279,7 +283,7 @@ mod tests {
             Err("cli_invalid_model")
         );
         assert_eq!(
-            generate("cli_claude", "claude-haiku-5-5", "", &"x".repeat(32_001)).await,
+            generate("cli_claude", "claude-haiku-5-5", "", &"x".repeat(MAX_TRANSCRIPT_BYTES + 1)).await,
             Err("cli_input_limit")
         );
     }
