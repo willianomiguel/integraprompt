@@ -181,6 +181,11 @@ impl Transport for ReqwestTransport {
             None => self.client.get(&req.url),
         };
         for (k, v) in &req.headers {
+            // `.json()` ja define o content-type; repetir faria o cabecalho sair duas vezes
+            // ("application/json, application/json") e a OpenAI nao leria o corpo (400 "model").
+            if k.eq_ignore_ascii_case("content-type") {
+                continue;
+            }
             rb = rb.header(k, v);
         }
         let resp = rb.send().await.map_err(map_reqwest)?;
@@ -314,5 +319,35 @@ pub(crate) mod tests {
         let m = Mock::ok(r#"{"data":[{"id":"gpt"}]}"#);
         assert_eq!(list_models(&m, &cfg(ApiFormat::OpenAi)).await.unwrap(), vec!["gpt"]);
         assert_eq!(m.seen.lock().unwrap()[0].url, "https://x.test/v1/models");
+    }
+
+    #[tokio::test]
+    async fn real_http_request_has_a_single_content_type_and_a_json_body() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = format!("http://{}/v1", listener.local_addr().unwrap());
+        let server = tokio::spawn(async move {
+            let (mut sock, _) = listener.accept().await.unwrap();
+            let mut buf = vec![0u8; 8192];
+            let mut got = String::new();
+            while !got.contains("\"messages\"") {
+                let n = sock.read(&mut buf).await.unwrap();
+                got.push_str(&String::from_utf8_lossy(&buf[..n]));
+            }
+            let body = r#"{"choices":[{"message":{"content":"ok"}}]}"#;
+            let resp = format!(
+                "HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: {}\r\n\r\n{body}",
+                body.len()
+            );
+            sock.write_all(resp.as_bytes()).await.unwrap();
+            got
+        });
+        let mut c = cfg(ApiFormat::OpenAi);
+        c.base_url = url;
+        let t = ReqwestTransport::new(std::time::Duration::from_secs(5));
+        assert_eq!(generate(&t, &c, &msgs()).await.unwrap(), "ok");
+        let raw = server.await.unwrap().to_lowercase();
+        assert_eq!(raw.matches("content-type:").count(), 1, "{raw}");
+        assert!(raw.contains("\"model\":\"m\""));
     }
 }
