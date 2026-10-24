@@ -773,7 +773,7 @@ fn default_post_process_providers() -> Vec<PostProcessProvider> {
         api_format: PostProcessApiFormat::OpenAi,
     });
 
-    // IA local leve do VozPrompt: llama-server + Qwen2.5 1.5B, baixados sob demanda.
+    // IA local leve do IntegraPrompt: llama-server + Qwen2.5 1.5B, baixados sob demanda.
     providers.push(PostProcessProvider {
         id: crate::vozprompt_local::LOCAL_PROVIDER_ID.to_string(),
         label: "Local (offline)".to_string(),
@@ -838,7 +838,7 @@ fn default_post_process_models() -> HashMap<String, String> {
 }
 
 fn default_post_process_prompts() -> Vec<LLMPrompt> {
-    // Modelos de prompt do VozPrompt (Geral, Programacao, Imagem, Video, Texto).
+    // Modelos de prompt do IntegraPrompt (Geral, Programacao, Imagem, Video, Texto).
     vozprompt_core::templates::TemplateLibrary::default()
         .templates
         .into_iter()
@@ -1210,7 +1210,7 @@ fn apply_settings_migrations(
 ) -> bool {
     let mut updated = false;
 
-    // VozPrompt: o modo Prompt e o recurso principal e fica sempre ligado.
+    // IntegraPrompt: o modo Prompt e o recurso principal e fica sempre ligado.
     if !settings.post_process_enabled {
         settings.post_process_enabled = true;
         updated = true;
