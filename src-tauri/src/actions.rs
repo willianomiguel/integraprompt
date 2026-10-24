@@ -184,15 +184,16 @@ pub(crate) async fn post_process_vozprompt_event(
             PostProcessApiFormat::OpenAi => ApiFormat::OpenAi,
             PostProcessApiFormat::Anthropic => ApiFormat::Anthropic,
         },
+        // trim: chave/modelo colados costumam trazer espaco ou quebra de linha no fim.
         api_key: settings
             .post_process_api_keys
             .get(&provider.id)
-            .cloned()
+            .map(|k| k.trim().to_string())
             .unwrap_or_default(),
         model: settings
             .post_process_models
             .get(&provider.id)
-            .cloned()
+            .map(|m| m.trim().to_string())
             .unwrap_or_default(),
     };
     let timeout = timeout_for_provider(&cfg.base_url);
