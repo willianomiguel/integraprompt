@@ -64,6 +64,16 @@ Actual output depends on the model, template and input. Existing templates inclu
 - **More time for local AI:** loopback endpoints receive up to 120 seconds; remote providers retain 20 seconds. Handled pipeline failures return the original transcription and report the reason.
 - **Windows icons:** the title and running taskbar icons follow the selected accent. The Windows taskbar background still follows Windows settings.
 
+## Models through your subscription CLI
+
+In **AI Prompts**, choose **Haiku 5.5 · low through Claude Code CLI** or **Luna · low through Codex CLI**. Models run on the providers' servers; the official CLI installed on your computer connects to them. These are not downloaded models or offline inference.
+
+First install [official Claude Code](https://code.claude.com/docs/en/setup) or [official Codex CLI](https://learn.chatgpt.com/docs/cli), run `claude` or `codex` in a terminal and sign in with your own account. Complete CLI login before using the application's shortcut. The app never asks for your password or copies tokens. Your account must have access to the selected model; requests consume your plan allowance and remain subject to its limits. Usage is not promised to be free or unlimited.
+
+Transcribed text is sent to the selected provider. Missing CLI, login, connection or quota preserves the raw transcript with an error message; no automatic paid-API fallback is used. **Gemini Flash is unavailable in this version**: the CLI test rejected individual access and the adapter remains disabled. See [limitations and checks](docs/CLI-PROMPTS.md).
+
+Templates request connected prose with context, requirements and verification, avoiding repeated labels and invented delivery formats. Existing editable templates, API providers and the local option remain available.
+
 ## Getting started
 
 1. Open the app and download a transcription model supporting your language, such as Whisper.

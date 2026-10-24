@@ -1288,6 +1288,7 @@ pub async fn fetch_post_process_models(
     app: AppHandle,
     provider_id: String,
 ) -> Result<Vec<String>, String> {
+    if let Some(model) = vozprompt_core::cli::model(&provider_id) { return Ok(vec![model.to_string()]); }
     let settings = settings::get_settings(&app);
 
     // Find the provider

@@ -64,6 +64,16 @@ A resposta real depende do modelo, do template e do que você disser. Os templat
 - **Mais tempo para IA local:** endpoints de loopback recebem até 120 segundos; provedores remotos continuam com 20 segundos. Nas falhas tratadas pelo pipeline, o resultado volta à transcrição original e informa o motivo.
 - **Ícones no Windows:** a logo da janela e o ícone da barra de tarefas acompanham a cor selecionada. Isso não altera o tema da barra de tarefas do próprio Windows.
 
+## Modelos pela sua assinatura via CLI
+
+O seletor em **Prompts com IA** oferece **Haiku 5.5 · low pelo Claude Code CLI** e **Luna · low pelo Codex CLI**. Esses modelos rodam nos servidores dos respectivos provedores; o CLI instalado no computador faz a conexão. Não são modelos baixados nem inferência offline.
+
+Antes de selecionar uma opção, instale o [Claude Code oficial](https://code.claude.com/docs/en/setup) ou o [Codex CLI oficial](https://learn.chatgpt.com/docs/cli), abra `claude` ou `codex` no terminal e entre na sua própria conta. Conclua o login no CLI antes de usar o atalho do aplicativo. O app não recebe sua senha nem copia tokens. A conta precisa ter acesso ao modelo; o uso consome sua cota e está sujeito aos limites do plano, sem promessa de gratuidade ou uso ilimitado.
+
+O texto transcrito é enviado ao provedor escolhido. Se faltar o CLI, login, conexão ou cota, o app preserva a transcrição e informa a falha; não troca automaticamente para uma API paga. **Gemini Flash aparece indisponível nesta versão**: o teste do CLI recusou acesso individual e a integração ficou desabilitada, conforme [limitações e validação](docs/CLI-PROMPTS.md).
+
+Os templates geram prompts em prosa, com contexto, requisitos e verificação, evitando rótulos repetidos e formatos de entrega inventados. Você continua podendo editar os templates e escolher os provedores de API ou a alternativa local já existentes.
+
 ## Comece a usar
 
 1. Abra o app e baixe um modelo de transcrição compatível com seu idioma, como Whisper.

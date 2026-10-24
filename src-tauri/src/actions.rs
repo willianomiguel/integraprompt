@@ -158,6 +158,13 @@ async fn post_process_vozprompt(
         .or_else(|| settings.post_process_prompts.first())
         .map(|p| p.prompt.replace("${output}", vozprompt_core::template::TRANSCRIPT_VAR))
         .unwrap_or_else(|| TemplateLibrary::default().templates[0].prompt.clone());
+    if vozprompt_core::cli::model(&provider.id).is_some() {
+        let model = settings.post_process_models.get(&provider.id).map(String::as_str).unwrap_or_default();
+        return match vozprompt_core::cli::generate(&provider.id, model, &template, transcription).await {
+            Ok(text) => Some(text),
+            Err(code) => fail(code),
+        };
+    }
     let cfg = ProviderConfig {
         base_url: provider.base_url.clone(),
         format: match provider.api_format {

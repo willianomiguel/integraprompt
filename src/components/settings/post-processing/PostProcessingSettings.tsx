@@ -26,9 +26,58 @@ import { LocalAiPanel } from "@/vozprompt/LocalAiPanel";
 const PostProcessingSettingsApiComponent: React.FC = () => {
   const { t } = useTranslation();
   const state = usePostProcessProviderState();
+  const isCli = state.selectedProviderId.startsWith("cli_");
+  const cliChoices = [
+    {
+      id: "cli_claude",
+      title: "Haiku 5.5",
+      detail: "Claude Code · low",
+      login: "claude",
+    },
+    { id: "cli_codex", title: "Luna", detail: "Codex · low", login: "codex" },
+    {
+      id: "cli_gemini",
+      title: "Gemini Flash",
+      detail: "Gemini CLI · 2.5 Flash",
+      login: "gemini",
+    },
+  ];
 
   return (
     <>
+      <div className="p-4 space-y-3">
+        <p className="font-medium">{t("settings.postProcessing.cli.title")}</p>
+        <p className="text-sm text-text/70">
+          {t("settings.postProcessing.cli.description")}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {cliChoices.map((choice) => (
+            <button
+              key={choice.id}
+              type="button"
+              disabled={choice.id === "cli_gemini"}
+              aria-pressed={state.selectedProviderId === choice.id}
+              onClick={() => state.handleProviderSelect(choice.id)}
+              className={`rounded-lg border p-3 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${state.selectedProviderId === choice.id ? "border-primary bg-primary/10" : "border-mid-gray/30 hover:bg-mid-gray/10"}`}
+            >
+              <span className="block font-medium">{choice.title}</span>
+              <span className="block text-xs text-text/70 mt-1">
+                {choice.id === "cli_gemini"
+                  ? t("settings.postProcessing.cli.geminiUnavailable")
+                  : choice.detail}
+              </span>
+            </button>
+          ))}
+        </div>
+        {isCli && (
+          <p className="text-sm text-text/70">
+            {t("settings.postProcessing.cli.login", {
+              command: cliChoices.find((c) => c.id === state.selectedProviderId)
+                ?.login,
+            })}
+          </p>
+        )}
+      </div>
       <SettingContainer
         title={t("settings.postProcessing.api.provider.title")}
         description={t("settings.postProcessing.api.provider.description")}
@@ -45,7 +94,7 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
         </div>
       </SettingContainer>
 
-      {state.selectedProviderId === "local" ? (
+      {isCli ? null : state.selectedProviderId === "local" ? (
         <LocalAiPanel />
       ) : state.isAppleProvider ? (
         state.appleIntelligenceUnavailable ? (
@@ -137,7 +186,7 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
         </>
       )}
 
-      {!state.isAppleProvider && (
+      {!state.isAppleProvider && !isCli && (
         <SettingContainer
           title={t("settings.postProcessing.api.model.title")}
           description={

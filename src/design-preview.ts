@@ -59,6 +59,17 @@ const settings: Record<string, unknown> = {
     },
   ],
   post_process_providers: [
+    ...[
+      ["cli_claude", "Claude Code · Haiku 5.5 / low"],
+      ["cli_codex", "Codex · Luna / low"],
+    ].map(([id, label]) => ({
+      id,
+      label,
+      base_url: "",
+      allow_base_url_edit: false,
+      api_format: "openai",
+      supports_structured_output: false,
+    })),
     {
       id: "local",
       label: "Local (offline)",
@@ -99,6 +110,14 @@ const model = {
 };
 mockWindows("main");
 mockIPC((cmd, args = {}) => {
+  if (cmd === "set_post_process_provider") {
+    settings.post_process_provider_id = (
+      args as Record<string, unknown>
+    ).providerId;
+    return null;
+  }
+  if (cmd === "fetch_post_process_models") return [];
+
   if (cmd === "change_accent_color_setting") {
     settings.accent_color = (args as Record<string, unknown>).accent;
     return null;

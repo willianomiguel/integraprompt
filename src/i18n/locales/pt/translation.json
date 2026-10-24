@@ -463,6 +463,12 @@
         "cancel": "Cancelar",
         "selectToEdit": "Selecione um prompt acima para visualizar e editar seus detalhes.",
         "createFirst": "Clique em 'Criar Novo Prompt' acima para criar seu primeiro prompt de pós-processamento."
+      },
+      "cli": {
+        "title": "Use seu CLI de IA",
+        "description": "Escolha o modelo para transformar sua fala em prompt. Usa o login do CLI oficial e consome a cota da sua conta; não é ilimitado. O texto será enviado ao provedor escolhido.",
+        "login": "Primeiro, instale o CLI oficial e entre na sua conta executando {{command}} no terminal. Não cole senhas ou tokens neste app. Se o login ou a cota falhar, sua transcrição será preservada. O Gemini CLI pode manter histórico próprio.",
+        "geminiUnavailable": "Indisponível: acesso individual recusado pelo serviço no teste"
       }
     },
     "history": {
@@ -709,7 +715,11 @@
       "truncated": "A resposta da IA veio cortada.",
       "unknown": "Erro desconhecido.",
       "local_not_installed": "Baixe a IA local nas configurações de IA primeiro.",
-      "local_failed": "Não consegui iniciar a IA local."
+      "local_failed": "Não consegui iniciar a IA local.",
+      "cli_missing": "CLI não encontrado. Instale o CLI oficial e faça login no terminal.",
+      "cli_failed": "O CLI não concluiu a geração. Verifique login, conexão e cota no terminal. Sua transcrição foi preservada.",
+      "cli_invalid_model": "Modelo não suportado por este atalho de CLI. Selecione uma das opções disponíveis.",
+      "cli_input_limit": "O texto excede o limite desta integração. Divida o pedido em partes menores."
     }
   },
   "appLanguage": {

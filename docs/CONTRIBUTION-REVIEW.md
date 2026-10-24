@@ -14,7 +14,7 @@ This is a draft proposal for maintainer evaluation, not a release or a merge-rea
 
 ## Excluded
 
-No user settings, history, recordings, API credentials, machine logs, installers, downloaded models, personal filesystem paths or agent workspace files are included. Mobile icons and design-review prototypes are excluded. Experimental prose prompts and model selection changes are excluded because output quality is not yet consistent. The development preview contains explicitly synthetic data.
+No user settings, history, recordings, API credentials, machine logs, installers, downloaded models, personal filesystem paths or agent workspace files are included. Mobile icons and design-review prototypes are excluded. The follow-up adds validated CLI adapters and prose prompt templates. Downloaded models and machine-specific model/account configuration remain excluded. The development preview contains explicitly synthetic data.
 
 ## Compatibility and limitations
 
@@ -47,3 +47,7 @@ See [media provenance](media/README.md). Screenshots and GIF use synthetic previ
 - Rust formatting: failed; includes baseline core formatting and new Rust hunks. Follow-up formatting is needed before merge.
 - PNGs and all six GIF frames visually inspected for personal information; PNG metadata absent. Changed-text credential/path screening found only unchanged synthetic credential fixtures already in the base repository.
 - Native desktop rebuild, macOS/Linux QA and full security audit are not completed for this exact submission.
+
+## Prepared follow-up: CLI prompt generation
+
+See [CLI-PROMPTS.md](CLI-PROMPTS.md). Claude Code Haiku 5.5 low and Codex Luna low were validated with synthetic requests; Gemini remains disabled after the official CLI rejected the tested individual account. Windows release compilation, installation, startup and saved default/template readback passed. Core tests: 28 passed. The selector passed desktop/narrow-browser QA. Microphone-to-paste end-to-end validation remains pending. This follow-up extends the draft PR with the CLI integration and prompt policy.

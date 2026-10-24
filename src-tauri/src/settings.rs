@@ -784,6 +784,15 @@ fn default_post_process_providers() -> Vec<PostProcessProvider> {
         api_format: PostProcessApiFormat::OpenAi,
     });
 
+    // Official local CLIs reuse the user's own login; no tokens enter app settings.
+    for (id, label, _) in vozprompt_core::cli::PRESETS {
+        providers.push(PostProcessProvider {
+            id: id.to_string(), label: label.to_string(), base_url: String::new(),
+            allow_base_url_edit: false, models_endpoint: None,
+            supports_structured_output: false, api_format: PostProcessApiFormat::OpenAi,
+        });
+    }
+
     // Custom provider always comes last
     providers.push(PostProcessProvider {
         id: "custom".to_string(),
@@ -807,6 +816,7 @@ fn default_post_process_api_keys() -> SecretMap {
 }
 
 fn default_model_for_provider(provider_id: &str) -> String {
+    if let Some(model) = vozprompt_core::cli::model(provider_id) { return model.to_string(); }
     if provider_id == APPLE_INTELLIGENCE_PROVIDER_ID {
         return APPLE_INTELLIGENCE_DEFAULT_MODEL_ID.to_string();
     }

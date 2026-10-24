@@ -1,5 +1,6 @@
 //! VozPrompt: logica pura, sem Tauri. Testavel com `cargo test -p vozprompt-core`.
 pub mod error;
+pub mod cli;
 pub mod pipeline;
 pub mod provider;
 pub mod secrets;

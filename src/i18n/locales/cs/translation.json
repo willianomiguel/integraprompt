@@ -442,6 +442,12 @@
         "cancel": "Zrušit",
         "selectToEdit": "Vyberte výše prompt, abyste zobrazili a upravili jeho podrobnosti.",
         "createFirst": "Klikněte nahoře na 'Vytvořit nový prompt' a vytvořte svůj první prompt pro následné zpracování."
+      },
+      "cli": {
+        "title": "Use your AI CLI",
+        "description": "Choose a model to turn speech into a prompt. Uses your official CLI login and account allowance; usage is not unlimited. Text is sent to the selected provider.",
+        "login": "First install the official CLI and sign in by running {{command}} in a terminal. Do not paste passwords or tokens into this app. If login or quota fails, your transcript is preserved. Gemini CLI may retain its own history.",
+        "geminiUnavailable": "Unavailable: individual CLI access rejected by service during testing"
       }
     },
     "history": {
@@ -688,7 +694,11 @@
       "truncated": "The AI answer was cut off.",
       "unknown": "Unknown error.",
       "local_not_installed": "Download the local AI in the AI settings first.",
-      "local_failed": "The local AI could not start."
+      "local_failed": "The local AI could not start.",
+      "cli_missing": "CLI not found. Install the official CLI and sign in in a terminal.",
+      "cli_failed": "The CLI could not complete generation. Check login, connection and quota in a terminal. Your transcript was preserved.",
+      "cli_invalid_model": "Unsupported CLI model. Select one of the available presets.",
+      "cli_input_limit": "Text exceeds this integration limit. Split the request into smaller parts."
     }
   },
   "appLanguage": {
