@@ -670,7 +670,7 @@ fn default_accent_color() -> String {
 }
 
 fn default_post_process_enabled() -> bool {
-    false
+    true
 }
 
 fn default_app_language() -> String {
@@ -1194,6 +1194,12 @@ fn apply_settings_migrations(
     settings_value: &serde_json::Value,
 ) -> bool {
     let mut updated = false;
+
+    // VozPrompt: o modo Prompt e o recurso principal e fica sempre ligado.
+    if !settings.post_process_enabled {
+        settings.post_process_enabled = true;
+        updated = true;
+    }
 
     // One-time onboarding migration: users with an explicit selected model have
     // already made it through model selection. Users who merely have compatible
