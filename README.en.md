@@ -13,7 +13,7 @@
 ## Usage
 
 1. Open the app and download a transcription model (Whisper, Parakeet, etc.).
-2. In **Post Process**, pick the provider, the model and a prompt template.
+2. In **AI prompts**, pick the provider, the model and a prompt template.
 3. Use one of the two shortcuts (configurable in **General**):
 
 | Shortcut | What it does | Windows/Linux default | macOS default |
@@ -39,7 +39,7 @@ Timeout: 20 s for remote providers, 120 s for the local AI.
 
 ## Prompt templates
 
-Five come built in: **General, Programming, Image, Video and Text/copy**. Edit them, create your own and pick the active one in **Post Process**. Base texts live in [`src-tauri/vozprompt-core/prompts/`](src-tauri/vozprompt-core/prompts).
+Five come built in: **General, Programming, Image, Video and Text/copy**. Edit them, create your own and pick the active one in **AI prompts**. Base texts live in [`src-tauri/vozprompt-core/prompts/`](src-tauri/vozprompt-core/prompts).
 
 ## Privacy
 

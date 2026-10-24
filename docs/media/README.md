@@ -1,6 +1,6 @@
 ﻿# Imagens e demonstração do README
 
-Todos os arquivos desta pasta foram capturados a partir da interface deste checkout, usando `design-preview.html`, dados fictícios e IPC simulado. Não contêm áudio, transcrição pessoal, chaves ou configuração real. A interface das capturas está em português.
+Todos os arquivos desta pasta foram capturados da interface atual, usando `design-preview.html`, dados fictícios e IPC simulado. Não contêm áudio, transcrição pessoal, chaves ou configuração real. A interface das capturas está em português.
 
 | Arquivo               | Conteúdo                                                                      |
 | --------------------- | ----------------------------------------------------------------------------- |

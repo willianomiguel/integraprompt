@@ -7,7 +7,7 @@ const context = await browser.newContext({
   reducedMotion: "reduce",
 });
 const page = await context.newPage();
-await page.goto("http://127.0.0.1:1420/design-preview.html");
+await page.goto("http://localhost:1420/design-preview.html");
 await page.locator(".accent-options button").first().waitFor();
 await page.locator(".theme-switch button").first().click();
 await page.locator(".accent-options button").nth(6).click();

@@ -15,8 +15,9 @@ Object.assign(window, {
 });
 const bindings = Object.fromEntries(
   [
-    ["transcribe", "ctrl+shift+space"],
-    ["transcribe_with_post_process", "ctrl+space"],
+    ["transcribe", "ctrl+space"],
+    ["transcribe_with_post_process", "ctrl+shift+space"],
+    ["improve_selection", "ctrl+shift+p"],
     ["cancel", "escape"],
   ].map(([id, key]) => [
     id,

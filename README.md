@@ -13,7 +13,7 @@
 ## Como usar
 
 1. Abra o app e baixe um modelo de transcrição (Whisper, Parakeet etc.).
-2. Em **Pós-Processamento**, escolha o provedor, o modelo e um modelo de prompt.
+2. Em **Prompts com IA**, escolha o provedor, o modelo e um modelo de prompt.
 3. Use um dos dois atalhos (configuráveis em **Geral**):
 
 | Atalho | O que faz | Padrão Windows/Linux | Padrão macOS |
@@ -39,7 +39,7 @@ Limite de espera: 20 s para provedores remotos e 120 s para IA local.
 
 ## Modelos de prompt
 
-Vêm cinco prontos: **Geral, Programação, Imagem, Vídeo e Texto/copy**. Você edita, cria e escolhe o ativo em **Pós-Processamento**. Os textos-base ficam em [`src-tauri/vozprompt-core/prompts/`](src-tauri/vozprompt-core/prompts).
+Vêm cinco prontos: **Geral, Programação, Imagem, Vídeo e Texto/copy**. Você edita, cria e escolhe o ativo em **Prompts com IA**. Os textos-base ficam em [`src-tauri/vozprompt-core/prompts/`](src-tauri/vozprompt-core/prompts).
 
 ## Privacidade
 
