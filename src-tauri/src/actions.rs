@@ -205,8 +205,14 @@ pub(crate) async fn post_process_vozprompt_event(
     )
     .await;
     if let Some(err) = &outcome.error {
-        error!("Prompt mode failed ({}); pasting the raw transcription", err.code());
-        return fail(err.code());
+        error!("Prompt mode failed ({err}); pasting the raw transcription");
+        // Recusa do provedor: repassa a mensagem dele (sem dados da requisicao nem chave).
+        return match err {
+            vozprompt_core::error::AiError::BadRequest(detail) => {
+                fail(&format!("{}:{detail}", err.code()))
+            }
+            _ => fail(err.code()),
+        };
     }
     outcome.ai_text
 }

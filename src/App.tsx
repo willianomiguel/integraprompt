@@ -54,6 +54,19 @@ const renderSettingsContent = (
   return <ActiveComponent />;
 };
 
+// Payload "codigo" ou "codigo:detalhe" (detalhe = mensagem do provedor numa recusa).
+const aiErrorDescription = (
+  payload: string,
+  t: (key: string, options?: Record<string, unknown>) => string,
+) => {
+  const split = payload.indexOf(":");
+  const code = split < 0 ? payload : payload.slice(0, split);
+  const message = t(`errors.aiFallback.${code}`, {
+    defaultValue: t("errors.aiFallback.unknown"),
+  });
+  return split < 0 ? message : `${message} ${payload.slice(split + 1)}`;
+};
+
 function App() {
   const { t, i18n } = useTranslation();
   const [onboardingStep, setOnboardingStep] = useState<OnboardingStep | null>(
@@ -207,9 +220,7 @@ function App() {
   useEffect(() => {
     const unlisten = listen<string>("post-process-error", (event) => {
       toast.error(t("errors.aiFallbackTitle"), {
-        description: t(`errors.aiFallback.${event.payload}`, {
-          defaultValue: t("errors.aiFallback.unknown"),
-        }),
+        description: aiErrorDescription(event.payload, t),
       });
     });
     return () => {
@@ -221,9 +232,7 @@ function App() {
   useEffect(() => {
     const unlisten = listen<string>("selection-error", (event) => {
       toast.error(t("errors.selection.title"), {
-        description: t(`errors.aiFallback.${event.payload}`, {
-          defaultValue: t("errors.aiFallback.unknown"),
-        }),
+        description: aiErrorDescription(event.payload, t),
       });
     });
     return () => {
