@@ -424,6 +424,12 @@
           "placeholderWithOptions": "חפש או בחר מודל",
           "placeholderNoOptions": "הקלד שם מודל",
           "refreshModels": "רענן מודלים"
+        },
+        "save": {
+          "title": "Save",
+          "description": "Saves the API key and the model name you typed above.",
+          "button": "Save",
+          "saved": "Saved"
         }
       },
       "prompts": {

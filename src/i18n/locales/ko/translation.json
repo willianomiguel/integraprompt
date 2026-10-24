@@ -424,6 +424,12 @@
           "placeholderWithOptions": "모델 검색 또는 선택",
           "placeholderNoOptions": "모델 이름 입력",
           "refreshModels": "모델 새로고침"
+        },
+        "save": {
+          "title": "Save",
+          "description": "Saves the API key and the model name you typed above.",
+          "button": "Save",
+          "saved": "Saved"
         }
       },
       "prompts": {

@@ -424,6 +424,12 @@
           "placeholderWithOptions": "मोडेल खोज्नुहोस् वा चयन गर्नुहोस्",
           "placeholderNoOptions": "मोडेलको नाम टाइप गर्नुहोस्",
           "refreshModels": "मोडेलहरू रिफ्रेस गर्नुहोस्"
+        },
+        "save": {
+          "title": "Save",
+          "description": "Saves the API key and the model name you typed above.",
+          "button": "Save",
+          "saved": "Saved"
         }
       },
       "prompts": {

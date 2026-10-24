@@ -424,6 +424,12 @@
           "placeholderWithOptions": "Buscar o seleccionar un modelo",
           "placeholderNoOptions": "Escribe un nombre de modelo",
           "refreshModels": "Actualizar modelos"
+        },
+        "save": {
+          "title": "Save",
+          "description": "Saves the API key and the model name you typed above.",
+          "button": "Save",
+          "saved": "Saved"
         }
       },
       "prompts": {

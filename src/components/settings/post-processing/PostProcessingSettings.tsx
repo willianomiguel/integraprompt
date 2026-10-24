@@ -16,8 +16,6 @@ import { Input } from "../../ui/Input";
 
 import { ProviderSelect } from "../PostProcessingSettingsApi/ProviderSelect";
 import { BaseUrlField } from "../PostProcessingSettingsApi/BaseUrlField";
-import { ApiKeyField } from "../PostProcessingSettingsApi/ApiKeyField";
-import { ModelSelect } from "../PostProcessingSettingsApi/ModelSelect";
 import { usePostProcessProviderState } from "../PostProcessingSettingsApi/usePostProcessProviderState";
 import { ShortcutInput } from "../ShortcutInput";
 import { useSettings } from "../../../hooks/useSettings";
@@ -27,6 +25,24 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
   const { t } = useTranslation();
   const state = usePostProcessProviderState();
   const isCli = state.selectedProviderId.startsWith("cli_");
+  // Rascunhos: a chave e o modelo so sao gravados ao clicar em Salvar.
+  const [keyDraft, setKeyDraft] = useState(state.apiKey);
+  const [modelDraft, setModelDraft] = useState(state.model);
+  const [saved, setSaved] = useState(false);
+  useEffect(() => {
+    setKeyDraft(state.apiKey);
+  }, [state.apiKey, state.selectedProviderId]);
+  useEffect(() => {
+    setModelDraft(state.model);
+  }, [state.model, state.selectedProviderId]);
+  const dirty =
+    keyDraft.trim() !== state.apiKey || modelDraft.trim() !== state.model;
+  const handleSave = () => {
+    state.handleApiKeyChange(keyDraft);
+    state.handleModelChange(modelDraft);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
   const cliChoices = [
     {
       id: "cli_claude",
@@ -172,14 +188,16 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
             grouped={true}
           >
             <div className="flex items-center gap-2">
-              <ApiKeyField
-                value={state.apiKey}
-                onBlur={state.handleApiKeyChange}
+              <Input
+                type="password"
+                value={keyDraft}
+                onChange={(event) => setKeyDraft(event.target.value)}
                 placeholder={t(
                   "settings.postProcessing.api.apiKey.placeholder",
                 )}
+                variant="compact"
                 disabled={state.isApiKeyUpdating}
-                className="min-w-[320px]"
+                className="flex-1 min-w-[320px]"
               />
             </div>
           </SettingContainer>
@@ -199,23 +217,22 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
           grouped={true}
         >
           <div className="flex items-center gap-2">
-            <ModelSelect
-              value={state.model}
-              options={state.modelOptions}
+            <Input
+              list="post-process-model-options"
+              value={modelDraft}
+              onChange={(event) => setModelDraft(event.target.value)}
               disabled={state.isModelUpdating}
-              isLoading={state.isFetchingModels}
-              placeholder={
-                state.modelOptions.length > 0
-                  ? t(
-                      "settings.postProcessing.api.model.placeholderWithOptions",
-                    )
-                  : t("settings.postProcessing.api.model.placeholderNoOptions")
-              }
-              onSelect={state.handleModelSelect}
-              onCreate={state.handleModelCreate}
-              onBlur={() => {}}
+              placeholder={t(
+                "settings.postProcessing.api.model.placeholderNoOptions",
+              )}
+              variant="compact"
               className="flex-1 min-w-[380px]"
             />
+            <datalist id="post-process-model-options">
+              {state.modelOptions.map((option) => (
+                <option key={option.value} value={option.value} />
+              ))}
+            </datalist>
             <ResetButton
               onClick={state.handleRefreshModels}
               disabled={state.isFetchingModels}
@@ -226,6 +243,32 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                 className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
               />
             </ResetButton>
+          </div>
+        </SettingContainer>
+      )}
+
+      {!state.isAppleProvider && !isCli && (
+        <SettingContainer
+          title={t("settings.postProcessing.api.save.title")}
+          description={t("settings.postProcessing.api.save.description")}
+          descriptionMode="tooltip"
+          layout="horizontal"
+          grouped={true}
+        >
+          <div className="flex items-center gap-3">
+            {saved && (
+              <span className="text-sm text-mid-gray">
+                {t("settings.postProcessing.api.save.saved")}
+              </span>
+            )}
+            <Button
+              variant="primary"
+              size="md"
+              onClick={handleSave}
+              disabled={!dirty}
+            >
+              {t("settings.postProcessing.api.save.button")}
+            </Button>
           </div>
         </SettingContainer>
       )}
