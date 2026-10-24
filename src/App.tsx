@@ -217,6 +217,20 @@ function App() {
     };
   }, [t]);
 
+  // Atalho "Melhorar seleção": avisa quando não havia texto selecionado ou a IA falhou.
+  useEffect(() => {
+    const unlisten = listen<string>("selection-error", (event) => {
+      toast.error(t("errors.selection.title"), {
+        description: t(`errors.aiFallback.${event.payload}`, {
+          defaultValue: t("errors.aiFallback.unknown"),
+        }),
+      });
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [t]);
+
   // Listen for model loading failures and show a toast
   useEffect(() => {
     const unlisten = listen<ModelStateEvent>("model-state-changed", (event) => {

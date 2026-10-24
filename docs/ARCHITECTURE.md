@@ -20,7 +20,8 @@ integraprompt/
 │   │   ├── settings.rs          Configurações e provedores
 │   │   ├── shortcut/            Atalhos globais
 │   │   ├── managers/            Áudio, modelos, transcrição, histórico
-│   │   └── vozprompt_local.rs   NOVO: sobe/baixa a IA local
+│   │   ├── vozprompt_local.rs   NOVO: sobe/baixa a IA local
+│   │   └── vozprompt_selection.rs NOVO: atalho "Melhorar seleção"
 │   ├── vozprompt-core/          NOVO: lógica pura, sem Tauri (crate testável)
 │   │   ├── prompts/*.txt        Textos dos 5 modelos de prompt
 │   │   └── src/                 template, provider, pipeline, templates, cli, local, secrets, error
@@ -41,6 +42,10 @@ integraprompt/
    - **CLI** (Claude Code, Codex): `cli::generate` roda o programa oficial sem shell, com o texto no stdin.
 4. **Falhou?** Qualquer erro devolve a transcrição bruta e emite o evento `post-process-error`; o frontend mostra o motivo. Nunca se perde a fala.
 5. O texto final é colado (`clipboard.rs`, `paste_tx/`) e a entrada vai para o histórico (`managers/history.rs`).
+
+## Melhorar seleção
+
+`vozprompt_selection.rs`: ao soltar o atalho, copia a seleção (Ctrl+C simulado, com um marcador no clipboard para detectar "nada selecionado"), chama o mesmo `post_process_vozprompt_event` e cola o resultado por cima. O clipboard original é restaurado e, se a IA falhar, nada é colado. Erros saem pelo evento `selection-error`.
 
 ## O que o `vozprompt-core` faz
 

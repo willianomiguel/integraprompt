@@ -165,6 +165,10 @@
           "transcribe_with_post_process": {
             "name": "Tecla de Pós-Processamento",
             "description": "Opcional: Uma tecla de atalho dedicada que sempre aplica pós-processamento com IA à sua transcrição."
+          },
+          "improve_selection": {
+            "name": "Atalho Melhorar Seleção",
+            "description": "Selecione qualquer texto, aperte este atalho e ele é reescrito como um prompt pronto."
           }
         },
         "errors": {
@@ -719,7 +723,13 @@
       "cli_missing": "CLI não encontrado. Instale o CLI oficial e faça login no terminal.",
       "cli_failed": "O CLI não concluiu a geração. Verifique login, conexão e cota no terminal. Sua transcrição foi preservada.",
       "cli_invalid_model": "Modelo não suportado por este atalho de CLI. Selecione uma das opções disponíveis.",
-      "cli_input_limit": "O texto excede o limite desta integração. Divida o pedido em partes menores."
+      "cli_input_limit": "O texto excede o limite desta integração. Divida o pedido em partes menores.",
+      "no_selection": "Selecione um texto antes de apertar o atalho.",
+      "copy_failed": "Não consegui copiar a seleção deste aplicativo.",
+      "paste_failed": "Não consegui colar o resultado."
+    },
+    "selection": {
+      "title": "Não foi possível melhorar o texto selecionado"
     }
   },
   "appLanguage": {

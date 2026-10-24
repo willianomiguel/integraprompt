@@ -171,6 +171,10 @@
           "transcribe_with_post_process": {
             "name": "后处理快捷键",
             "description": "可选：一个专用快捷键，始终对您的转录应用 AI 后处理。"
+          },
+          "improve_selection": {
+            "name": "Improve Selection Shortcut",
+            "description": "Select any text, press this shortcut and it is rewritten as a ready-to-use prompt."
           }
         },
         "errors": {
@@ -698,7 +702,13 @@
       "cli_missing": "CLI not found. Install the official CLI and sign in in a terminal.",
       "cli_failed": "The CLI could not complete generation. Check login, connection and quota in a terminal. Your transcript was preserved.",
       "cli_invalid_model": "Unsupported CLI model. Select one of the available presets.",
-      "cli_input_limit": "Text exceeds this integration limit. Split the request into smaller parts."
+      "cli_input_limit": "Text exceeds this integration limit. Split the request into smaller parts.",
+      "no_selection": "Select some text first, then press the shortcut.",
+      "copy_failed": "Could not copy the selection from this app.",
+      "paste_failed": "Could not paste the result."
+    },
+    "selection": {
+      "title": "Could not improve the selected text"
     }
   },
   "appLanguage": {

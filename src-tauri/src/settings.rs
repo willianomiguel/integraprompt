@@ -985,6 +985,21 @@ pub fn get_default_settings() -> AppSettings {
             current_binding: default_post_process_shortcut.to_string(),
         },
     );
+    // Melhorar o texto selecionado (Ctrl+Shift+P; no macOS Option+Shift+P).
+    #[cfg(target_os = "macos")]
+    let improve_selection_shortcut = "option+shift+p";
+    #[cfg(not(target_os = "macos"))]
+    let improve_selection_shortcut = "ctrl+shift+p";
+    bindings.insert(
+        "improve_selection".to_string(),
+        ShortcutBinding {
+            id: "improve_selection".to_string(),
+            name: "Improve Selection".to_string(),
+            description: "Turns the selected text into a prompt and replaces it.".to_string(),
+            default_binding: improve_selection_shortcut.to_string(),
+            current_binding: improve_selection_shortcut.to_string(),
+        },
+    );
     bindings.insert(
         "cancel".to_string(),
         ShortcutBinding {

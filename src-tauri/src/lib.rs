@@ -28,6 +28,7 @@ mod tray;
 mod tray_i18n;
 mod utils;
 mod vozprompt_local;
+mod vozprompt_selection;
 
 pub use cli::CliArgs;
 #[cfg(debug_assertions)]

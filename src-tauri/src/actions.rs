@@ -134,12 +134,22 @@ async fn post_process_vozprompt(
     settings: &AppSettings,
     transcription: &str,
 ) -> Option<String> {
+    post_process_vozprompt_event(app, settings, transcription, "post-process-error").await
+}
+
+/// Igual a `post_process_vozprompt`, mas com o nome do evento de erro escolhido pelo chamador.
+pub(crate) async fn post_process_vozprompt_event(
+    app: &AppHandle,
+    settings: &AppSettings,
+    transcription: &str,
+    error_event: &str,
+) -> Option<String> {
     use vozprompt_core::pipeline::{process, timeout_for_provider};
     use vozprompt_core::provider::{ApiFormat, ProviderConfig, ReqwestTransport};
     use vozprompt_core::templates::TemplateLibrary;
 
     let fail = |code: &str| {
-        let _ = app.emit("post-process-error", code.to_string());
+        let _ = app.emit(error_event, code.to_string());
         None
     };
     let Some(provider) = settings.active_post_process_provider() else {
@@ -975,6 +985,10 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
     map.insert(
         "transcribe_with_post_process".to_string(),
         Arc::new(TranscribeAction { post_process: true }) as Arc<dyn ShortcutAction>,
+    );
+    map.insert(
+        "improve_selection".to_string(),
+        Arc::new(crate::vozprompt_selection::ImproveSelectionAction) as Arc<dyn ShortcutAction>,
     );
     map.insert(
         "cancel".to_string(),

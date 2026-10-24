@@ -20,8 +20,9 @@
 | --- | --- | --- | --- |
 | **Ditado** | Transcreve e cola o texto como foi dito | `Ctrl + Espaço` | `Option + Espaço` |
 | **Prompt** | Transcreve, manda para a IA e cola o prompt pronto | `Ctrl + Shift + Espaço` | `Option + Shift + Espaço` |
+| **Melhorar seleção** | Reescreve o texto selecionado como prompt, no lugar | `Ctrl + Shift + P` | `Option + Shift + P` |
 
-Você usa **um** atalho por vez. O de Prompt já faz tudo: transcrever e melhorar. Os dois precisam ter teclas diferentes.
+Você usa **um** atalho por vez. O de Prompt já faz tudo: transcrever e melhorar. **Melhorar seleção** funciona com texto digitado: selecione, aperte o atalho e ele troca o texto pelo prompt (se a IA falhar, o texto fica como estava). Todos precisam de teclas diferentes e podem ser trocados em **Geral**. Atenção: `Ctrl + Shift + P` também é usado por outros programas, como a paleta de comandos do VS Code.
 
 Se a IA falhar (sem internet, chave inválida, demora demais), o app cola a **transcrição original** e mostra o motivo. Você nunca perde o que falou.
 

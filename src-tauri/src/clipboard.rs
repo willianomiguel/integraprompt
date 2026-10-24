@@ -27,7 +27,7 @@ static PASTE_LOCK: Mutex<()> = Mutex::new(());
 /// injection hops back here because macOS's TIS keyboard layout APIs must run
 /// on the main thread. Tauri runs the closure inline when already on the main
 /// thread, so nested calls can't deadlock.
-fn with_enigo<T: Send + 'static>(
+pub(crate) fn with_enigo<T: Send + 'static>(
     app_handle: &AppHandle,
     f: impl FnOnce(&mut Enigo) -> Result<T, String> + Send + 'static,
 ) -> Result<T, String> {

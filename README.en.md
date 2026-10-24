@@ -20,8 +20,9 @@
 | --- | --- | --- | --- |
 | **Dictation** | Transcribes and pastes the text as spoken | `Ctrl + Space` | `Option + Space` |
 | **Prompt** | Transcribes, sends to the AI and pastes the finished prompt | `Ctrl + Shift + Space` | `Option + Shift + Space` |
+| **Improve selection** | Rewrites the selected text as a prompt, in place | `Ctrl + Shift + P` | `Option + Shift + P` |
 
-Use **one** shortcut at a time. Prompt already does everything: transcribe and improve. The two must use different keys.
+Use **one** shortcut at a time. Prompt already does everything: transcribe and improve. **Improve selection** works on typed text: select it, press the shortcut and it is replaced by the prompt (if the AI fails, your text stays as it was). All shortcuts need different keys and can be changed in **General**. Note: `Ctrl + Shift + P` is also used by other programs, such as the VS Code command palette.
 
 If the AI fails (offline, bad key, too slow), the app pastes the **original transcription** and shows why. You never lose what you said.
 

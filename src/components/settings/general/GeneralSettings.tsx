@@ -47,6 +47,7 @@ export const GeneralSettings: React.FC = () => {
           grouped={true}
         />
         <ShortcutInput shortcutId="transcribe" grouped={true} />
+        <ShortcutInput shortcutId="improve_selection" grouped={true} />
         <ShortcutActivationSetting descriptionMode="tooltip" grouped={true} />
         {/* Cancel shortcut remains hidden on Linux because of dynamic shortcut instability. */}
         {!isLinux && <ShortcutInput shortcutId="cancel" grouped={true} />}
