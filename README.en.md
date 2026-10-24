@@ -8,7 +8,15 @@
 
 ![IntegraPrompt interface](docs/media/app-light.png)
 
-> **Status:** work in progress, no published release. Tested on Windows x64. macOS and Linux still need builds and testing. What is missing is in [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Status:** first version (0.1.0), tested on Windows x64. macOS and Linux still need builds and testing. What is missing is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Download (Windows)
+
+1. Download `IntegraPrompt_0.1.0_x64-setup.exe` from [Releases](https://github.com/willianomiguel/integraprompt/releases/latest).
+2. Run it. The installer is **not code-signed yet**, so Windows SmartScreen may warn you: click **More info**, then **Run anyway**.
+3. Follow [Usage](#usage). API keys are stored as plain text on your PC for now; do not use a key you cannot rotate.
+
+On macOS and Linux you currently need to [build from source](#build).
 
 ## Usage
 

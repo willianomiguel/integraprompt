@@ -8,7 +8,15 @@
 
 ![Interface do IntegraPrompt](docs/media/app-light.png)
 
-> **Status:** em desenvolvimento, sem release publicada. Testado no Windows x64. macOS e Linux ainda precisam de build e testes. O que falta está em [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Status:** versão inicial (0.1.0), testada no Windows x64. macOS e Linux ainda precisam de build e testes. O que falta está em [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Baixar (Windows)
+
+1. Baixe o `IntegraPrompt_0.1.0_x64-setup.exe` em [Releases](https://github.com/willianomiguel/integraprompt/releases/latest).
+2. Execute. O instalador ainda **não é assinado**, então o Windows pode mostrar o aviso do SmartScreen: clique em **Mais informações** e depois em **Executar assim mesmo**.
+3. Siga os passos de [Como usar](#como-usar). As chaves de API ficam salvas em texto no seu PC por enquanto; não use uma chave que você não possa trocar.
+
+Para macOS e Linux, por enquanto é preciso [compilar do código](#compilar).
 
 ## Como usar
 

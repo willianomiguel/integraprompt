@@ -22,6 +22,8 @@
 
 **Distribuição**
 - [ ] Testar macOS e Linux.
-- [ ] Gerar chaves do updater, ligar `createUpdaterArtifacts` e publicar a primeira release (`.msi`, `.exe`, `.dmg`, AppImage, `.deb`).
+- [x] Instalador do Windows (`.exe`) na release 0.1.0.
+- [ ] Instaladores de macOS e Linux (`.dmg`, AppImage, `.deb`) e CI de release.
+- [ ] Gerar chaves do updater e ligar `createUpdaterArtifacts` (atualização automática).
 - [ ] Assinatura de código (Windows/macOS) por secrets opcionais.
 - [ ] Traduzir os textos novos para os outros 23 idiomas.
