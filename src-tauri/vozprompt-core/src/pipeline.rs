@@ -6,6 +6,19 @@ use std::time::Duration;
 /// Tempo maximo de toda a chamada a IA.
 pub const AI_TIMEOUT: Duration = Duration::from_secs(20);
 
+/// CPU-hosted models need more time for a full prompt than remote providers.
+/// Parse the URL rather than trusting a provider label or a hostname prefix.
+pub fn timeout_for_provider(base_url: &str) -> Duration {
+    let local = reqwest::Url::parse(base_url).ok().is_some_and(|url| {
+        url.host_str().is_some_and(|host| {
+            host.eq_ignore_ascii_case("localhost")
+                || host.trim_matches(['[', ']']).parse::<std::net::IpAddr>()
+                    .is_ok_and(|ip| ip.is_loopback())
+        })
+    });
+    if local { Duration::from_secs(120) } else { AI_TIMEOUT }
+}
+
 /// Resultado do modo Prompt. `final_text` e sempre o que deve ser colado.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Outcome {
@@ -55,6 +68,16 @@ mod tests {
         ProviderConfig { base_url: "http://x".into(), format: ApiFormat::OpenAi, api_key: "k".into(), model: "m".into() }
     }
     const OK: &str = r#"{"choices":[{"message":{"content":"PROMPT"}}]}"#;
+
+    #[test]
+    fn local_cpu_timeout_does_not_change_remote_timeout() {
+        for url in ["http://127.0.0.1:18765/v1", "http://localhost:8765/v1", "http://[::1]:8080/v1"] {
+            assert_eq!(timeout_for_provider(url), Duration::from_secs(120));
+        }
+        for url in ["https://api.openai.com/v1", "https://localhost.example.com/v1", "not a URL"] {
+            assert_eq!(timeout_for_provider(url), AI_TIMEOUT);
+        }
+    }
 
     #[tokio::test]
     async fn success_pastes_ai_text_not_the_transcript() {

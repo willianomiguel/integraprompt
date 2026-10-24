@@ -48,7 +48,7 @@
   /* Card geometry — single source of truth for the visible overlay sizes. The
      native overlay window (overlay.rs) is sized from these: it must be at least
      the card's max footprint (--ov-work-w for compact, --ov-open-w for Live),
-     since the card is anchored flush to the screen edge in CSS. Keep overlay.rs
+     with a 3px safe inset inside the native window. Keep overlay.rs
      in sync when these change. */
   --ov-rest-w: 172px; /* resting compact pill (minimal, recording) -- roomy enough
                          for the English working label before the grow starts */
@@ -97,22 +97,24 @@
 /* ============================================================
    Unified overlay stage — one fixed, transparent container shared by the compact
    pill and the Live panel (both render the same `.scard` base). The card is
-   anchored flush to the screen-edge side (bottom by default, top when placed up
+   anchored with a 3px safe inset on the screen-edge side (bottom by default, top when placed up
    top) and centered horizontally, so the visible card sits exactly
-   OVERLAY_*_OFFSET from the screen edge regardless of window height — only the
+   OVERLAY_*_OFFSET plus the safe inset from the screen edge regardless of window height — only the
    offsets in overlay.rs move it. Pops scale from that edge, so the card is never
    drawn past it (matters for the 4px top offset on Windows/Linux).
    ============================================================ */
 .ov-stage {
   position: fixed;
   inset: 0;
+  padding: 3px;
+  box-sizing: border-box;
   display: flex;
   justify-content: center; /* horizontal centering, kept for both forms */
-  align-items: flex-end; /* bottom placement: flush to the bottom edge */
+  align-items: flex-end; /* bottom placement: inside the safe inset */
   font-family: var(--s-font);
 }
 .ov-stage.top {
-  align-items: flex-start; /* top placement: flush to the top edge */
+  align-items: flex-start; /* top placement: inside the safe inset */
 }
 
 /* Compact pill: fade the whole container in/out (the pill itself never pops or
@@ -163,7 +165,7 @@
   width: var(--ov-pill-w);
   /* Never wider than the window: an unaccounted content zoom degrades to a
      narrower card instead of clipping. 2px = our border (no border-box reset). */
-  max-width: calc(100vw - 2px);
+  max-width: calc(100vw - 8px);
   border-radius: 24px;
   overflow: hidden;
   display: flex;
@@ -174,17 +176,17 @@
   border: 1px solid var(--s-border);
   /* Flat: no drop shadow, no backdrop blur/saturate (was a glassy gradient look). */
   /* pop-in plays on mount; morph (width/radius) is a transition */
-  animation: scard-pop 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: scard-pop 280ms cubic-bezier(0.22, 1, 0.36, 1);
   transition:
-    width 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 460ms cubic-bezier(0.22, 1, 0.36, 1);
+    width 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 280ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform, width, opacity;
 }
 @keyframes scard-pop {
   from {
     opacity: 0;
     /* Scale from the anchored edge (transform-origin) — never translate past it. */
-    transform: scale(0.92);
+    transform: scale(0.98);
   }
   to {
     opacity: 1;
@@ -226,7 +228,7 @@
   grid-template-rows: 0fr;
   opacity: 0;
   transition:
-    grid-template-rows 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 260ms ease;
 }
 .scard.open .stext {
@@ -239,8 +241,8 @@
 }
 .stext-cap {
   /* Vertical counterpart of the .scard clamp: show fewer lines rather than clip.
-     20px = cap padding (12) + card borders (2) + 6px slack for zoom rounding. */
-  max-height: min(var(--ov-cap-max-h), calc(100vh - var(--ov-base-h) - 20px));
+     26px = cap padding (12) + card borders (2) + safe inset (6) + zoom slack (6). */
+  max-height: min(var(--ov-cap-max-h), calc(100vh - var(--ov-base-h) - 26px));
   overflow-y: auto;
   overscroll-behavior: contain;
   display: flex;
@@ -293,6 +295,7 @@
 /* base row — dot (left) | waveform (center) | timer + cancel (right).
    Same structure for pill & panel; the dot stays anchored left in both. */
 .sbase {
+  user-select: none;
   height: var(--ov-base-h);
   flex: none; /* the control row never squashes; only the text region gives */
   padding: 0 10px;
@@ -346,7 +349,7 @@
 }
 .stimer {
   font-size: 12px;
-  color: var(--s-faint);
+  color: var(--s-muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   opacity: 0;
@@ -468,4 +471,32 @@
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Pointer capture belongs only to the control row; transcript stays selectable. */
+.sbase[data-draggable="true"] {
+  cursor: grab;
+}
+.sbase[data-draggable="true"]:active {
+  cursor: grabbing;
+}
+.sx:focus-visible {
+  outline: 2px solid var(--s-accent);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ov-stage *,
+  .ov-stage {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .swave i {
+    height: 6px !important;
+  }
+  .sx:hover,
+  .sx:active,
+  .scard.leaving {
+    transform: none;
+  }
 }

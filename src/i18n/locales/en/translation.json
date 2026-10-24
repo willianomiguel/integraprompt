@@ -1,4 +1,25 @@
 {
+  "appearance": {
+    "title": "Your color",
+    "description": "Choose an accent color. Every option adapts to light, dark and system themes.",
+    "colors": {
+      "pink": "Pink",
+      "red": "Red",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "green": "Green",
+      "sky": "Light blue",
+      "blue": "Blue",
+      "indigo": "Indigo",
+      "violet": "Violet"
+    }
+  },
+  "audioStorage": {
+    "group": "Recording storage",
+    "label": "Save recorded audio",
+    "description": "Off by default. When off, keep only text in history. Turn on to replay or transcribe future recordings again. Existing recordings are not deleted by this switch.",
+    "notSaved": "Audio not saved · text kept in history"
+  },
   "tray": {
     "settings": "Settings...",
     "checkUpdates": "Check for Updates...",
@@ -680,7 +701,7 @@
     "aiFallbackTitle": "The AI step failed - pasted your raw transcription",
     "aiFallback": {
       "not_configured": "Choose a provider, model and API key in the AI settings.",
-      "timeout": "The provider took longer than 20 seconds to answer.",
+      "timeout": "The provider did not respond within the time limit.",
       "network": "Could not reach the provider. Check your internet connection.",
       "auth": "The API key is missing or invalid.",
       "rate_limited": "Too many requests or quota exceeded.",
@@ -729,6 +750,29 @@
       "download": "Download local AI",
       "downloading": "Downloading... {{percent}}%",
       "ready": "Local AI is ready."
+    }
+  },
+  "workspace": {
+    "promptsLabel": "AI prompts",
+    "eyebrow": "Your voice, with intention",
+    "navigation": "Main navigation",
+    "brandCaption": "Voice to text. Thought to prompt.",
+    "sidebarNote": "A space for your voice",
+    "sections": {
+      "general": "Your shortcuts, voice and everyday preferences.",
+      "history": "Revisit your words and keep what matters.",
+      "models": "Choose the voice model that fits your computer.",
+      "advanced": "Fine-tune how your words reach your apps.",
+      "postprocessing": "Turn your thoughts into clear, useful prompts.",
+      "about": "The people and technology behind your voice.",
+      "debug": "Tools for diagnosing and verifying behavior."
+    },
+    "intro": {
+      "label": "Ready when you are",
+      "title": "Speak naturally. Make it clear.",
+      "description": "Dictate your words as they are, or let AI organize your ideas into a prompt.",
+      "prompt": "Voice → structured prompt",
+      "dictation": "Voice → text"
     }
   }
 }

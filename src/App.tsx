@@ -28,6 +28,7 @@ import {
 } from "./components/settings";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Sidebar, SidebarSection, SECTIONS_CONFIG } from "./components/Sidebar";
+import { WorkspaceHeader } from "./components/WorkspaceHeader";
 import { WhatsNewGate } from "./components/whats-new";
 import { useSettings } from "./hooks/useSettings";
 import { useSettingsStore } from "./stores/settingsStore";
@@ -423,7 +424,7 @@ function App() {
     content = (
       <div
         dir={direction}
-        className="h-screen flex flex-col select-none cursor-default"
+        className="workspace-shell h-screen flex flex-col select-none cursor-default"
       >
         <ErrorBoundary context="What's New">
           <WhatsNewGate />
@@ -435,9 +436,13 @@ function App() {
             onSectionChange={setCurrentSection}
           />
           {/* Scrollable content area */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="workspace-main flex-1 flex flex-col overflow-hidden">
+            <WorkspaceHeader section={currentSection} />
             <div ref={settingsScrollRef} className="flex-1 overflow-y-auto">
-              <div className="flex flex-col items-center p-4 gap-4">
+              <div
+                className="workspace-content flex flex-col items-center gap-4"
+                key={currentSection}
+              >
                 <AccessibilityPermissions />
                 <SecureInputWarning />
                 {renderSettingsContent(currentSection, setOnboardingPreview)}

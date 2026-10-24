@@ -215,7 +215,7 @@ impl HistoryManager {
     }
 
     /// Save a new history entry to the database.
-    /// The WAV file should already have been written to the recordings directory.
+    /// An empty file_name represents text-only history. Otherwise the WAV must exist.
     pub fn save_entry(
         &self,
         file_name: String,
@@ -364,7 +364,7 @@ impl HistoryManager {
 
             // Delete WAV file
             let file_path = self.recordings_dir.join(file_name);
-            if file_path.exists() {
+            if !file_name.is_empty() && file_path.is_file() {
                 if let Err(e) = fs::remove_file(&file_path) {
                     error!("Failed to delete WAV file {}: {}", file_name, e);
                 } else {
@@ -614,7 +614,7 @@ impl HistoryManager {
         if let Some(entry) = self.get_entry_by_id(id).await? {
             // Delete the audio file first
             let file_path = self.get_audio_file_path(&entry.file_name);
-            if file_path.exists() {
+            if !entry.file_name.is_empty() && file_path.is_file() {
                 if let Err(e) = fs::remove_file(&file_path) {
                     error!("Failed to delete audio file {}: {}", entry.file_name, e);
                     // Continue with database deletion even if file deletion fails

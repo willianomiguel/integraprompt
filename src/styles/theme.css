@@ -1,4 +1,5 @@
 /* Handy Colors */
+@import "./accents.css";
 
 :root {
   /* Palette source of truth. Each themed color is defined once as a

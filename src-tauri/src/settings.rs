@@ -449,6 +449,9 @@ pub struct AppSettings {
     pub history_limit: usize,
     #[serde(default = "default_recording_retention_period")]
     pub recording_retention_period: RecordingRetentionPeriod,
+    /// Keep the recording on disk after transcription. Text history is independent.
+    #[serde(default)]
+    pub save_recording_audio: bool,
     #[serde(default)]
     pub paste_method: PasteMethod,
     #[serde(default)]
@@ -479,6 +482,8 @@ pub struct AppSettings {
     pub app_language: String,
     #[serde(default = "default_theme")]
     pub theme: Theme,
+    #[serde(default = "default_accent_color")]
+    pub accent_color: String,
     #[serde(default)]
     pub experimental_enabled: bool,
     #[serde(default)]
@@ -658,6 +663,10 @@ fn default_sound_theme() -> SoundTheme {
 
 fn default_theme() -> Theme {
     Theme::System
+}
+
+fn default_accent_color() -> String {
+    "pink".to_string()
 }
 
 fn default_post_process_enabled() -> bool {
@@ -1007,6 +1016,7 @@ pub fn get_default_settings() -> AppSettings {
         word_correction_threshold: default_word_correction_threshold(),
         history_limit: default_history_limit(),
         recording_retention_period: default_recording_retention_period(),
+        save_recording_audio: false,
         paste_method: PasteMethod::default(),
         clipboard_handling: ClipboardHandling::default(),
         auto_submit: default_auto_submit(),
@@ -1022,6 +1032,7 @@ pub fn get_default_settings() -> AppSettings {
         append_trailing_space: false,
         app_language: default_app_language(),
         theme: default_theme(),
+        accent_color: default_accent_color(),
         experimental_enabled: false,
         lazy_stream_close: false,
         keyboard_implementation: KeyboardImplementation::default(),
@@ -1075,10 +1086,10 @@ impl AppSettings {
 
 /// Startup entry point. Same load-or-create/salvage/migrate behavior as
 /// `get_settings`; kept as a named alias for call-site clarity, plus a
-/// one-time debug dump of the loaded settings.
+/// one-time startup message without logging credentials or private prompts.
 pub fn load_or_create_app_settings(app: &AppHandle) -> AppSettings {
     let settings = get_settings(app);
-    debug!("Loaded settings: {:?}", settings);
+    debug!("Application settings loaded");
     settings
 }
 
@@ -1291,6 +1302,24 @@ pub fn update_checks_forced_disabled() -> bool {
 /// directly, so the forced-off state never leaks into the persisted setting.
 pub fn update_checks_effectively_enabled(settings: &AppSettings) -> bool {
     settings.update_checks_enabled && !update_checks_forced_disabled()
+}
+
+/// Flush appearance preferences before reporting success to the frontend.
+pub fn write_settings_persisted(app: &AppHandle, settings: AppSettings) -> Result<(), String> {
+    let store = app
+        .store(crate::portable::store_path(SETTINGS_STORE_PATH))
+        .map_err(|e| e.to_string())?;
+    let previous = store.get("settings");
+    store.set("settings", serde_json::to_value(&settings).map_err(|e| e.to_string())?);
+    if let Err(error) = store.save() {
+        if let Some(previous) = previous {
+            store.set("settings", previous);
+        } else {
+            store.delete("settings");
+        }
+        return Err(error.to_string());
+    }
+    Ok(())
 }
 
 pub fn write_settings(app: &AppHandle, settings: AppSettings) {

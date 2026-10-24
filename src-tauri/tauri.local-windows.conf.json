@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "VozPrompt",
+  "identifier": "com.vozprompt.desktop",
+  "bundle": {
+    "createUpdaterArtifacts": false,
+    "targets": ["nsis"],
+    "windows": {
+      "signCommand": null,
+      "nsis": {
+        "template": null,
+        "installMode": "currentUser"
+      }
+    }
+  },
+  "plugins": {
+    "updater": { "endpoints": [] }
+  }
+}

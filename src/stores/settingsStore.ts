@@ -133,6 +133,10 @@ const settingUpdaters: {
     ),
   recording_retention_period: (value) =>
     commands.updateRecordingRetentionPeriod(value as string),
+  save_recording_audio: async (value) => {
+    const result = await commands.updateSaveRecordingAudio(value as boolean);
+    if (result.status === "error") throw new Error(result.error);
+  },
   translate_to_english: (value) =>
     commands.changeTranslateToEnglishSetting(value as boolean),
   selected_language: (value) =>
@@ -169,7 +173,14 @@ const settingUpdaters: {
     commands.changeAppendTrailingSpaceSetting(value as boolean),
   log_level: (value) => commands.setLogLevel(value as any),
   app_language: (value) => commands.changeAppLanguageSetting(value as string),
-  theme: (value) => commands.changeThemeSetting(value as string),
+  theme: async (value) => {
+    const result = await commands.changeThemeSetting(value as string);
+    if (result.status === "error") throw new Error(result.error);
+  },
+  accent_color: async (value) => {
+    const result = await commands.changeAccentColorSetting(value as string);
+    if (result.status === "error") throw new Error(result.error);
+  },
   experimental_enabled: (value) =>
     commands.changeExperimentalEnabledSetting(value as boolean),
   lazy_stream_close: (value) =>

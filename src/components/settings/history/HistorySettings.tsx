@@ -317,6 +317,7 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
   const [retrying, setRetrying] = useState(false);
 
   const hasTranscription = entry.transcription_text.trim().length > 0;
+  const hasAudio = entry.file_name.length > 0;
 
   const handleLoadAudio = useCallback(
     () => getAudioUrl(entry.file_name),
@@ -395,8 +396,12 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
           </IconButton>
           <IconButton
             onClick={handleRetranscribe}
-            disabled={retrying}
-            title={t("settings.history.retranscribe")}
+            disabled={retrying || !hasAudio}
+            title={t(
+              hasAudio
+                ? "settings.history.retranscribe"
+                : "audioStorage.notSaved",
+            )}
           >
             <RotateCcw
               width={16}
@@ -447,7 +452,11 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
             : t("settings.history.transcriptionFailed")}
       </p>
 
-      <AudioPlayer onLoadRequest={handleLoadAudio} className="w-full" />
+      {hasAudio ? (
+        <AudioPlayer onLoadRequest={handleLoadAudio} className="w-full" />
+      ) : (
+        <p className="text-xs text-text/50">{t("audioStorage.notSaved")}</p>
+      )}
     </div>
   );
 };

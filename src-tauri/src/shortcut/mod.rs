@@ -645,12 +645,31 @@ pub fn change_theme_setting(app: AppHandle, theme: String) -> Result<(), String>
         }
     };
     settings.theme = parsed;
-    settings::write_settings(&app, settings);
+    settings::write_settings_persisted(&app, settings)?;
     #[cfg(any(target_os = "windows", target_os = "macos"))]
     apply_window_theme(&app, parsed);
+    if let Err(error) = crate::appearance::apply_icon(&app) {
+        warn!("Failed to update appearance icon: {}", error);
+    }
     // Notify other webviews (the recording overlay) so they re-apply the palette
     // live — they set `data-theme` on their own document and can't see this one.
     let _ = app.emit("theme-changed", parsed);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_accent_color_setting(app: AppHandle, accent: String) -> Result<(), String> {
+    if !matches!(accent.as_str(), "pink" | "red" | "orange" | "yellow" | "green" | "sky" | "blue" | "indigo" | "violet") {
+        return Err("Unsupported accent color".to_string());
+    }
+    let mut settings = settings::get_settings(&app);
+    settings.accent_color = accent.clone();
+    settings::write_settings_persisted(&app, settings)?;
+    if let Err(error) = crate::appearance::apply_icon(&app) {
+        warn!("Failed to update appearance icon: {}", error);
+    }
+    let _ = app.emit("accent-color-changed", accent);
     Ok(())
 }
 

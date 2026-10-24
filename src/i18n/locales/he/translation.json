@@ -677,7 +677,7 @@
     "aiFallbackTitle": "The AI step failed - pasted your raw transcription",
     "aiFallback": {
       "not_configured": "Choose a provider, model and API key in the AI settings.",
-      "timeout": "The provider took longer than 20 seconds to answer.",
+      "timeout": "The provider did not respond within the time limit.",
       "network": "Could not reach the provider. Check your internet connection.",
       "auth": "The API key is missing or invalid.",
       "rate_limited": "Too many requests or quota exceeded.",
