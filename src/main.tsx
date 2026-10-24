@@ -3,11 +3,7 @@ import ReactDOM from "react-dom/client";
 import { platform } from "@tauri-apps/plugin-os";
 import App from "./App";
 import { installCompatShims } from "./lib/compat";
-import {
-  applyTheme,
-  getStoredTheme,
-  syncThemeFromSettings,
-} from "./lib/utils/theme";
+import { initializeAppearance } from "./lib/utils/theme";
 
 installCompatShims();
 
@@ -16,8 +12,7 @@ document.documentElement.dataset.platform = platform();
 
 // Apply the last-known theme synchronously before render to avoid a flash of
 // the wrong palette, then reconcile with the persisted setting once it loads.
-applyTheme(getStoredTheme());
-syncThemeFromSettings();
+void initializeAppearance();
 
 // Initialize i18n
 import "./i18n";

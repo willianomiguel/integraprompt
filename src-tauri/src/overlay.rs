@@ -3,6 +3,8 @@ use crate::settings;
 use crate::settings::{OverlayPosition, OverlayStyle};
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
+#[cfg(target_os = "windows")]
+use tauri::Listener;
 use tauri::{AppHandle, Emitter, Manager, PhysicalPosition, PhysicalSize};
 
 #[cfg(not(target_os = "macos"))]
@@ -333,6 +335,64 @@ fn windows_overlay_bounds(
     (x, y, width, height)
 }
 
+// Session-only physical bounds. Cleared on hide; never written to settings.
+#[cfg(target_os = "windows")]
+#[derive(Default)]
+struct WindowsOverlayDrag {
+    origin: Option<(i32, i32, i32, i32)>,
+    bounds: Option<(i32, i32, i32, i32)>,
+}
+#[cfg(target_os = "windows")]
+static WINDOWS_OVERLAY_DRAG: std::sync::Mutex<WindowsOverlayDrag> =
+    std::sync::Mutex::new(WindowsOverlayDrag {
+        origin: None,
+        bounds: None,
+    });
+
+/// Move without activating the destination window or entering a modal drag loop.
+#[cfg(target_os = "windows")]
+fn handle_windows_overlay_drag(window: &tauri::WebviewWindow, action: &str) {
+    use windows::Win32::Foundation::{POINT, RECT};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetCursorPos, GetWindowRect, SetWindowPos, SWP_NOACTIVATE, SWP_NOSIZE, SWP_NOZORDER,
+    };
+    let Ok(mut drag) = WINDOWS_OVERLAY_DRAG.lock() else {
+        return;
+    };
+    if action == "end" {
+        drag.origin = None;
+        return;
+    }
+    let Ok(hwnd) = window.hwnd() else { return };
+    let mut cursor = POINT::default();
+    let mut rect = RECT::default();
+    unsafe {
+        if GetCursorPos(&mut cursor).is_err() || GetWindowRect(hwnd, &mut rect).is_err() {
+            return;
+        }
+        if action == "start" {
+            drag.origin = Some((cursor.x, cursor.y, rect.left, rect.top));
+        } else if action == "move" {
+            if let Some((cx, cy, wx, wy)) = drag.origin {
+                let (x, y) = (wx + cursor.x - cx, wy + cursor.y - cy);
+                if SetWindowPos(
+                    hwnd,
+                    None,
+                    x,
+                    y,
+                    0,
+                    0,
+                    SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER,
+                )
+                .is_ok()
+                {
+                    drag.bounds = Some((x, y, rect.right - rect.left, rect.bottom - rect.top));
+                }
+            }
+        }
+    }
+}
+
 /// Moves and sizes the overlay in one native SetWindowPos, bypassing tao's
 /// current-DPI logical conversion that mislands cross-monitor moves.
 #[cfg(target_os = "windows")]
@@ -344,10 +404,16 @@ fn place_windows_overlay(
 ) -> Result<(), String> {
     use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_NOACTIVATE, SWP_NOZORDER};
 
-    let monitor = get_monitor_with_cursor(app_handle)
+    let dragged_bounds = WINDOWS_OVERLAY_DRAG
+        .lock()
+        .ok()
+        .and_then(|drag| drag.bounds);
+    let monitor = dragged_bounds
+        .and_then(|_| overlay_window.current_monitor().ok().flatten())
+        .or_else(|| get_monitor_with_cursor(app_handle))
         .ok_or_else(|| "failed to determine the monitor containing the cursor".to_string())?;
     let text_scale = windows_text_scale_factor();
-    let (x, y, width, height) = windows_overlay_bounds(
+    let (mut x, mut y, width, height) = windows_overlay_bounds(
         *monitor.position(),
         *monitor.size(),
         monitor.scale_factor(),
@@ -356,6 +422,15 @@ fn place_windows_overlay(
         logical_height,
         settings::get_settings(app_handle).overlay_position,
     );
+    // Keep the moved center and anchored edge through recording -> working changes.
+    if let Some((left, top, old_width, old_height)) = dragged_bounds {
+        x = left + (old_width - width) / 2;
+        y = if settings::get_settings(app_handle).overlay_position == OverlayPosition::Top {
+            top
+        } else {
+            top + old_height - height
+        };
+    }
     let hwnd = overlay_window
         .hwnd()
         .map_err(|error| format!("failed to get overlay window handle: {error}"))?;
@@ -429,6 +504,22 @@ pub fn create_recording_overlay(app_handle: &AppHandle) {
     #[allow(unused_variables)]
     match builder.build() {
         Ok(window) => {
+            #[cfg(target_os = "windows")]
+            {
+                let drag_window = window.clone();
+                window.listen("overlay-drag", move |event| {
+                    let Ok(action) = serde_json::from_str::<String>(event.payload()) else {
+                        return;
+                    };
+                    if !matches!(action.as_str(), "start" | "move" | "end") {
+                        return;
+                    }
+                    let target = drag_window.clone();
+                    let _ = drag_window.run_on_main_thread(move || {
+                        handle_windows_overlay_drag(&target, &action);
+                    });
+                });
+            }
             #[cfg(target_os = "linux")]
             {
                 // Try to initialize GTK layer shell, ignore errors if compositor doesn't support it
@@ -687,6 +778,10 @@ static OVERLAY_SHOW_GENERATION: AtomicU64 = AtomicU64::new(0);
 
 /// Hides the recording overlay window with fade-out animation
 pub fn hide_recording_overlay(app_handle: &AppHandle) {
+    #[cfg(target_os = "windows")]
+    if let Ok(mut drag) = WINDOWS_OVERLAY_DRAG.lock() {
+        *drag = WindowsOverlayDrag::default();
+    }
     // Always hide the overlay regardless of settings - if setting was changed while recording,
     // we still want to hide it properly
     if let Some(overlay_window) = app_handle.get_webview_window("recording_overlay") {

@@ -1,0 +1,57 @@
+/* Optional accent presets. Status colors and neutral surfaces stay unchanged. */
+:root[data-accent="red"] {
+  --light-color-logo-primary: #f6b2b2;
+  --dark-color-logo-primary: #ee9898;
+  --light-color-logo-stroke: #572b2b;
+  --dark-color-logo-stroke: #ffdddd;
+  --color-background-ui: #b63e46;
+}
+:root[data-accent="orange"] {
+  --light-color-logo-primary: #f5c49e;
+  --dark-color-logo-primary: #e7a268;
+  --light-color-logo-stroke: #57351f;
+  --dark-color-logo-stroke: #ffe4cb;
+  --color-background-ui: #a9511b;
+}
+:root[data-accent="yellow"] {
+  --light-color-logo-primary: #f3df94;
+  --dark-color-logo-primary: #dfbf53;
+  --light-color-logo-stroke: #51431d;
+  --dark-color-logo-stroke: #fff0b5;
+  --color-background-ui: #826309;
+}
+:root[data-accent="green"] {
+  --light-color-logo-primary: #afe0c9;
+  --dark-color-logo-primary: #74bda0;
+  --light-color-logo-stroke: #244b3c;
+  --dark-color-logo-stroke: #d4f2e4;
+  --color-background-ui: #277657;
+}
+:root[data-accent="sky"] {
+  --light-color-logo-primary: #b7ddf7;
+  --dark-color-logo-primary: #94c6ed;
+  --light-color-logo-stroke: #21425b;
+  --dark-color-logo-stroke: #d5ebff;
+  --color-background-ui: #2d709f;
+}
+:root[data-accent="blue"] {
+  --light-color-logo-primary: #aac9ee;
+  --dark-color-logo-primary: #79aae7;
+  --light-color-logo-stroke: #243e61;
+  --dark-color-logo-stroke: #d4e5ff;
+  --color-background-ui: #315e91;
+}
+:root[data-accent="indigo"] {
+  --light-color-logo-primary: #c6c7ef;
+  --dark-color-logo-primary: #a2a3e6;
+  --light-color-logo-stroke: #36355d;
+  --dark-color-logo-stroke: #e1dfff;
+  --color-background-ui: #5452a3;
+}
+:root[data-accent="violet"] {
+  --light-color-logo-primary: #e0c2f1;
+  --dark-color-logo-primary: #c59ae4;
+  --light-color-logo-stroke: #493056;
+  --dark-color-logo-stroke: #efdafa;
+  --color-background-ui: #8050a0;
+}

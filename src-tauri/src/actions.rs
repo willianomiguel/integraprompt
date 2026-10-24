@@ -127,14 +127,14 @@ fn should_use_streaming_overlay(style: OverlayStyle, is_streaming: bool) -> bool
     style == OverlayStyle::Live && is_streaming
 }
 
-/// Modo Prompt: usa o pipeline do `vozprompt-core` (timeout de 20 s). Em qualquer falha devolve
+/// Modo Prompt: 20 s para provedores remotos, 120 s para modelos locais em CPU. Em qualquer falha devolve
 /// `None` (o chamador cola a transcricao bruta) e avisa o usuario pelo evento `post-process-error`.
 async fn post_process_vozprompt(
     app: &AppHandle,
     settings: &AppSettings,
     transcription: &str,
 ) -> Option<String> {
-    use vozprompt_core::pipeline::{process, AI_TIMEOUT};
+    use vozprompt_core::pipeline::{process, timeout_for_provider};
     use vozprompt_core::provider::{ApiFormat, ProviderConfig, ReqwestTransport};
     use vozprompt_core::templates::TemplateLibrary;
 
@@ -158,6 +158,13 @@ async fn post_process_vozprompt(
         .or_else(|| settings.post_process_prompts.first())
         .map(|p| p.prompt.replace("${output}", vozprompt_core::template::TRANSCRIPT_VAR))
         .unwrap_or_else(|| TemplateLibrary::default().templates[0].prompt.clone());
+    if vozprompt_core::cli::model(&provider.id).is_some() {
+        let model = settings.post_process_models.get(&provider.id).map(String::as_str).unwrap_or_default();
+        return match vozprompt_core::cli::generate(&provider.id, model, &template, transcription).await {
+            Ok(text) => Some(text),
+            Err(code) => fail(code),
+        };
+    }
     let cfg = ProviderConfig {
         base_url: provider.base_url.clone(),
         format: match provider.api_format {
@@ -175,12 +182,13 @@ async fn post_process_vozprompt(
             .cloned()
             .unwrap_or_default(),
     };
+    let timeout = timeout_for_provider(&cfg.base_url);
     let outcome = process(
-        &ReqwestTransport::new(AI_TIMEOUT),
+        &ReqwestTransport::new(timeout),
         &cfg,
         &template,
         transcription,
-        AI_TIMEOUT,
+        timeout,
     )
     .await;
     if let Some(err) = &outcome.error {
@@ -714,15 +722,20 @@ impl ShortcutAction for TranscribeAction {
                     utils::hide_recording_overlay(&ah);
                     set_tray_state(&ah, TrayIconState::Idle);
                 } else {
-                    // Save WAV concurrently with transcription
+                    // Audio persistence is opt-in; transcription always uses memory.
+                    let save_audio = get_settings(&ah).save_recording_audio;
                     let sample_count = samples.len();
                     let file_name = format!("handy-{}.wav", chrono::Utc::now().timestamp());
                     let wav_path = hm.recordings_dir().join(&file_name);
                     let wav_path_for_verify = wav_path.clone();
-                    let samples_for_wav = samples.clone();
-                    let wav_handle = tauri::async_runtime::spawn_blocking(move || {
-                        crate::audio_toolkit::save_wav_file(&wav_path, &samples_for_wav)
-                    });
+                    let wav_handle = if save_audio {
+                        let samples_for_wav = samples.clone();
+                        Some(tauri::async_runtime::spawn_blocking(move || {
+                            crate::audio_toolkit::save_wav_file(&wav_path, &samples_for_wav)
+                        }))
+                    } else {
+                        None
+                    };
 
                     // Transcribe concurrently with WAV save: the live decode's
                     // result when it has one (all audio was already fed to it),
@@ -732,27 +745,31 @@ impl ShortcutAction for TranscribeAction {
                     let transcription_result = tm.transcribe_recording(samples);
 
                     // Await WAV save and verify
-                    let wav_saved = match wav_handle.await {
-                        Ok(Ok(())) => {
-                            match crate::audio_toolkit::verify_wav_file(
-                                &wav_path_for_verify,
-                                sample_count,
-                            ) {
-                                Ok(()) => true,
-                                Err(e) => {
-                                    error!("WAV verification failed: {}", e);
-                                    false
+                    let wav_saved = if let Some(wav_handle) = wav_handle {
+                        match wav_handle.await {
+                            Ok(Ok(())) => {
+                                match crate::audio_toolkit::verify_wav_file(
+                                    &wav_path_for_verify,
+                                    sample_count,
+                                ) {
+                                    Ok(()) => true,
+                                    Err(e) => {
+                                        error!("WAV verification failed: {}", e);
+                                        false
+                                    }
                                 }
                             }
+                            Ok(Err(e)) => {
+                                error!("Failed to save WAV file: {}", e);
+                                false
+                            }
+                            Err(e) => {
+                                error!("WAV save task panicked: {}", e);
+                                false
+                            }
                         }
-                        Ok(Err(e)) => {
-                            error!("Failed to save WAV file: {}", e);
-                            false
-                        }
-                        Err(e) => {
-                            error!("WAV save task panicked: {}", e);
-                            false
-                        }
+                    } else {
+                        false
                     };
 
                     if rm.was_cancelled_since(cancel_generation) {
@@ -796,10 +813,10 @@ impl ShortcutAction for TranscribeAction {
                                 return;
                             }
 
-                            // Save to history if WAV was saved
-                            if wav_saved {
+                            // Preserve text even when audio persistence is disabled or fails.
+                            {
                                 if let Err(err) = hm.save_entry(
-                                    file_name,
+                                    if wav_saved { file_name } else { String::new() },
                                     transcription,
                                     post_process,
                                     processed.post_processed_text.clone(),

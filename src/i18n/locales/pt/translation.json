@@ -1,4 +1,25 @@
 {
+  "appearance": {
+    "title": "Sua cor",
+    "description": "Escolha uma cor de destaque. Cada opção se adapta aos temas claro, escuro e do sistema.",
+    "colors": {
+      "pink": "Rosa",
+      "red": "Vermelho",
+      "orange": "Laranja",
+      "yellow": "Amarelo",
+      "green": "Verde",
+      "sky": "Azul claro",
+      "blue": "Azul",
+      "indigo": "Índigo",
+      "violet": "Violeta"
+    }
+  },
+  "audioStorage": {
+    "group": "Armazenamento das gravações",
+    "label": "Salvar áudio gravado",
+    "description": "Desativado por padrão. Quando desligado, mantém apenas o texto no histórico. Ative para ouvir ou transcrever novamente as próximas gravações. Esta opção não apaga gravações anteriores.",
+    "notSaved": "Áudio não salvo · texto mantido no histórico"
+  },
   "tray": {
     "settings": "Configurações...",
     "checkUpdates": "Verificar Atualizações...",
@@ -442,6 +463,12 @@
         "cancel": "Cancelar",
         "selectToEdit": "Selecione um prompt acima para visualizar e editar seus detalhes.",
         "createFirst": "Clique em 'Criar Novo Prompt' acima para criar seu primeiro prompt de pós-processamento."
+      },
+      "cli": {
+        "title": "Use seu CLI de IA",
+        "description": "Escolha o modelo para transformar sua fala em prompt. Usa o login do CLI oficial e consome a cota da sua conta; não é ilimitado. O texto será enviado ao provedor escolhido.",
+        "login": "Primeiro, instale o CLI oficial e entre na sua conta executando {{command}} no terminal. Não cole senhas ou tokens neste app. Se o login ou a cota falhar, sua transcrição será preservada. O Gemini CLI pode manter histórico próprio.",
+        "geminiUnavailable": "Indisponível: acesso individual recusado pelo serviço no teste"
       }
     },
     "history": {
@@ -677,7 +704,7 @@
     "aiFallbackTitle": "A IA falhou - colei a transcrição original",
     "aiFallback": {
       "not_configured": "Escolha provedor, modelo e chave de API nas configurações de IA.",
-      "timeout": "O provedor demorou mais de 20 segundos para responder.",
+      "timeout": "O provedor não respondeu dentro do prazo limite.",
       "network": "Não consegui falar com o provedor. Verifique sua internet.",
       "auth": "A chave de API está ausente ou inválida.",
       "rate_limited": "Muitas requisições ou cota esgotada.",
@@ -688,7 +715,11 @@
       "truncated": "A resposta da IA veio cortada.",
       "unknown": "Erro desconhecido.",
       "local_not_installed": "Baixe a IA local nas configurações de IA primeiro.",
-      "local_failed": "Não consegui iniciar a IA local."
+      "local_failed": "Não consegui iniciar a IA local.",
+      "cli_missing": "CLI não encontrado. Instale o CLI oficial e faça login no terminal.",
+      "cli_failed": "O CLI não concluiu a geração. Verifique login, conexão e cota no terminal. Sua transcrição foi preservada.",
+      "cli_invalid_model": "Modelo não suportado por este atalho de CLI. Selecione uma das opções disponíveis.",
+      "cli_input_limit": "O texto excede o limite desta integração. Divida o pedido em partes menores."
     }
   },
   "appLanguage": {
@@ -729,6 +760,29 @@
       "download": "Baixar IA local",
       "downloading": "Baixando... {{percent}}%",
       "ready": "A IA local está pronta."
+    }
+  },
+  "workspace": {
+    "promptsLabel": "Prompts com IA",
+    "eyebrow": "Sua voz, com intenção",
+    "navigation": "Navegação principal",
+    "brandCaption": "Da voz ao texto. Da ideia ao prompt.",
+    "sidebarNote": "Um espaço para sua voz",
+    "sections": {
+      "general": "Seus atalhos, sua voz e as preferências do dia a dia.",
+      "history": "Revisite suas palavras e guarde o que importa.",
+      "models": "Escolha o modelo de voz ideal para seu computador.",
+      "advanced": "Ajuste como suas palavras chegam aos aplicativos.",
+      "postprocessing": "Transforme suas ideias em prompts claros e úteis.",
+      "about": "As pessoas e a tecnologia por trás da sua voz.",
+      "debug": "Ferramentas para diagnóstico e verificação."
+    },
+    "intro": {
+      "label": "No seu ritmo",
+      "title": "Fale naturalmente. Dê forma à ideia.",
+      "description": "Dite suas palavras como elas são ou deixe a IA organizar suas ideias em um prompt.",
+      "prompt": "Voz → prompt estruturado",
+      "dictation": "Voz → texto"
     }
   }
 }

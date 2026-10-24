@@ -1,4 +1,5 @@
-import { listen } from "@tauri-apps/api/event";
+import { applyAccent, applyTheme } from "@/lib/utils/theme";
+import { emitTo, listen } from "@tauri-apps/api/event";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./RecordingOverlay.css";
@@ -18,6 +19,7 @@ type OverlayState = "recording" | "streaming" | "transcribing" | "processing";
 // Number of reactive bars in the waveform (the simple, smoothed style shared by
 // every overlay form). Mic levels arrive as 16 FFT buckets; we take the first N.
 const WAVE_BARS = 9;
+const WINDOWS_DRAG = navigator.userAgent.includes("Windows");
 
 // Only call out a model load in the Live preview once it has run this long.
 // Warm loads finish in well under this (~0.2s on Apple Silicon, ~1.5s on a
@@ -68,6 +70,40 @@ const RecordingOverlay: React.FC = () => {
   // until they scroll back down.
   const capRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true);
+  const dragPointerRef = useRef<number | null>(null);
+  // Native cursor coordinates avoid mixing WebView zoom and monitor DPI.
+  const emitDrag = (action: "start" | "move" | "end") => {
+    void emitTo("recording_overlay", "overlay-drag", action).catch((error) => {
+      console.warn("Overlay drag event failed", error);
+    });
+  };
+  const dragHandlers = {
+    onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!WINDOWS_DRAG || event.button !== 0 || event.pointerType !== "mouse")
+        return;
+      if ((event.target as Element).closest("button")) return;
+      event.preventDefault();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      dragPointerRef.current = event.pointerId;
+      emitDrag("start");
+    },
+    onPointerMove: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (dragPointerRef.current === event.pointerId) emitDrag("move");
+    },
+    onLostPointerCapture: () => {
+      dragPointerRef.current = null;
+      emitDrag("end");
+    },
+    onPointerUp: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (dragPointerRef.current !== event.pointerId) return;
+      emitDrag("move");
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    },
+    onPointerCancel: () => {
+      dragPointerRef.current = null;
+      emitDrag("end");
+    },
+  };
   const direction = getLanguageDirection(i18n.language);
 
   useEffect(() => {
@@ -90,6 +126,8 @@ const RecordingOverlay: React.FC = () => {
         try {
           const settings = await commands.getAppSettings();
           if (settings.status === "ok") {
+            applyTheme(settings.data.theme ?? "system");
+            applyAccent(settings.data.accent_color ?? "pink");
             setPosition(
               settings.data.overlay_position === "top" ? "top" : "bottom",
             );
@@ -229,7 +267,10 @@ const RecordingOverlay: React.FC = () => {
 
   // ---- Shared building blocks (one visual language for every overlay form) ----
   const waveform = (
-    <div className={`swave ${captureReady ? "ready" : "arming"}`}>
+    <div
+      className={`swave ${captureReady ? "ready" : "arming"}`}
+      aria-hidden="true"
+    >
       {levels.map((v, i) => (
         <i
           key={i}
@@ -244,7 +285,8 @@ const RecordingOverlay: React.FC = () => {
   const cancelBtn = (
     <button
       className="sx"
-      aria-label="cancel"
+      aria-label={t("tray.cancel")}
+      title={t("tray.cancel")}
       onClick={() => commands.cancelOperation()}
     >
       <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -261,7 +303,7 @@ const RecordingOverlay: React.FC = () => {
   // dot (left) | waveform (center) | timer + cancel (right) — same structure for
   // pill & panel, so the Live morph is a pure width change.
   const listeningRow = (showTimer: boolean, showCancel: boolean) => (
-    <div className="sbase">
+    <div className="sbase" data-draggable={WINDOWS_DRAG} {...dragHandlers}>
       <div className="sbase-l">
         <span className={`sdot ${captureReady ? "ready" : "arming"}`} />
       </div>
@@ -276,11 +318,13 @@ const RecordingOverlay: React.FC = () => {
   // spinner (left) | label (center) | cancel (right) — same 3-zone grid as the
   // listening row, so the label is centered.
   const workingRow = (label: string, showCancel: boolean) => (
-    <div className="sbase">
+    <div className="sbase" data-draggable={WINDOWS_DRAG} {...dragHandlers}>
       <div className="sbase-l">
-        <span className="sspinner" />
+        <span className="sspinner" aria-hidden="true" />
       </div>
-      <span className="swork-label">{label}</span>
+      <span className="swork-label" role="status" aria-live="polite">
+        {label}
+      </span>
       <div className="sbase-r">{showCancel && cancelBtn}</div>
     </div>
   );

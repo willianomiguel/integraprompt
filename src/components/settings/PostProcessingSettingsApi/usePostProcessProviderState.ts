@@ -111,7 +111,10 @@ export const usePostProcessProviderState = (): PostProcessProviderState => {
         const hasBaseUrl = (provider?.base_url ?? "").trim() !== "";
         const hasApiKey = apiKey.trim() !== "";
 
-        if (provider?.id === "custom" ? hasBaseUrl : hasApiKey) {
+        if (
+          providerId.startsWith("cli_") ||
+          (provider?.id === "custom" ? hasBaseUrl : hasApiKey)
+        ) {
           void fetchPostProcessModels(providerId);
         }
       }

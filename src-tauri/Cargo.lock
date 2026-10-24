@@ -7767,6 +7767,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tar",
+ "tempfile",
  "tokio",
  "zip 2.6.1",
 ]

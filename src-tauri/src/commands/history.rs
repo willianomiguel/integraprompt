@@ -41,6 +41,9 @@ pub async fn get_audio_file_path(
     file_name: String,
 ) -> Result<String, String> {
     let path = history_manager.get_audio_file_path(&file_name);
+    if file_name.is_empty() || !path.is_file() {
+        return Err("Audio was not saved for this entry".to_string());
+    }
     path.to_str()
         .ok_or_else(|| "Invalid file path".to_string())
         .map(|s| s.to_string())
@@ -74,6 +77,9 @@ pub async fn retry_history_entry_transcription(
         .ok_or_else(|| format!("History entry {} not found", id))?;
 
     let audio_path = history_manager.get_audio_file_path(&entry.file_name);
+    if entry.file_name.is_empty() {
+        return Err("Audio was not saved for this entry".to_string());
+    }
     let samples = crate::audio_toolkit::read_wav_samples(&audio_path)
         .map_err(|e| format!("Failed to load audio: {}", e))?;
 
@@ -121,6 +127,15 @@ pub async fn update_history_limit(
         .cleanup_old_entries()
         .map_err(|e| e.to_string())?;
 
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn update_save_recording_audio(app: AppHandle, enabled: bool) -> Result<(), String> {
+    let mut settings = crate::settings::get_settings(&app);
+    settings.save_recording_audio = enabled;
+    crate::settings::write_settings(&app, settings);
     Ok(())
 }
 
