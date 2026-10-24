@@ -28,7 +28,7 @@
     "customModelDescription": "Tidak didukung secara resmi",
     "migration": {
       "title": "Model Anda perlu diperbarui",
-      "description": "Handy kini menggunakan jenis model yang lebih baru. Unduh versi baru untuk terus mentranskripsi. Versi lama akan dihapus.",
+      "description": "IntegraPrompt kini menggunakan jenis model yang lebih baru. Unduh versi baru untuk terus mentranskripsi. Versi lama akan dihapus.",
       "replaces": "Menggantikan {{name}}",
       "oldFormat": "Format lama",
       "failed": "Unduhan gagal",
@@ -69,7 +69,7 @@
     },
     "permissions": {
       "title": "Izin Diperlukan",
-      "description": "Handy memerlukan beberapa izin agar dapat berfungsi dengan baik.",
+      "description": "IntegraPrompt memerlukan beberapa izin agar dapat berfungsi dengan baik.",
       "microphone": {
         "title": "Akses Mikrofon",
         "description": "Diperlukan untuk menangkap suara Anda agar dapat ditranskripsikan."
@@ -126,7 +126,7 @@
     "general": {
       "title": "Umum",
       "shortcut": {
-        "title": "Pintasan Handy",
+        "title": "Pintasan IntegraPrompt",
         "description": "Atur pintasan keyboard untuk memulai perekaman ucapan-ke-teks",
         "loading": "Memuat pintasan...",
         "none": "Belum ada pintasan yang diatur",
@@ -184,7 +184,7 @@
       "deleteActiveConfirm": "{{modelName}} adalah model aktif Anda. Menghapusnya akan menghentikan transkripsi sampai Anda memilih model baru. Yakin ingin melanjutkan?",
       "deleteTitle": "Hapus Model",
       "retiredNotice": {
-        "title": "Model lama tidak lagi berfungsi dengan Handy",
+        "title": "Model lama tidak lagi berfungsi dengan IntegraPrompt",
         "description": "Model tersebut memakan {{size}} di komputer Anda.",
         "delete": "Hapus model",
         "deleted": "Model lama telah dihapus",
@@ -197,7 +197,7 @@
       },
       "rescan": {
         "label": "Pindai Ulang",
-        "tooltip": "Pindai ulang model yang ditambahkan ke folder model atau cache Hugging Face dari luar Handy"
+        "tooltip": "Pindai ulang model yang ditambahkan ke folder model atau cache Hugging Face dari luar IntegraPrompt"
       },
       "noModelsMatch": "Tidak ada model yang cocok dengan kriteria ini."
     },
@@ -261,11 +261,11 @@
       },
       "autostart": {
         "label": "Jalankan saat Komputer Dinyalakan",
-        "description": "Mulai Handy secara otomatis saat Anda masuk ke komputer."
+        "description": "Mulai IntegraPrompt secara otomatis saat Anda masuk ke komputer."
       },
       "showTrayIcon": {
         "label": "Tampilkan Ikon Baki Sistem",
-        "description": "Tampilkan ikon Handy di baki sistem."
+        "description": "Tampilkan ikon IntegraPrompt di baki sistem."
       },
       "overlay": {
         "style": {
@@ -489,7 +489,7 @@
       },
       "updateChecks": {
         "label": "Periksa Pembaruan",
-        "description": "Periksa versi baru Handy secara otomatis",
+        "description": "Periksa versi baru IntegraPrompt secara otomatis",
         "lockedDescription": "Dinonaktifkan oleh konfigurasi sistem (HANDY_DISABLE_UPDATER)"
       },
       "whatsNewPreview": {
@@ -581,7 +581,7 @@
       },
       "keyboardDiagnostic": {
         "title": "Diagnostik Keyboard",
-        "description": "Memeriksa apakah peristiwa keyboard mencapai Handy. Hanya jumlah peristiwa yang dicatat — bukan tombol yang Anda tekan.",
+        "description": "Memeriksa apakah peristiwa keyboard mencapai IntegraPrompt. Hanya jumlah peristiwa yang dicatat — bukan tombol yang Anda tekan.",
         "run": "Jalankan diagnostik 10 dtk",
         "running": "Mendengarkan… tekan pintasan Anda beberapa kali (mis. Option+Space)",
         "secureInputLabel": "Secure Input",
@@ -595,7 +595,7 @@
         "mouse": "Mouse",
         "verdictBlocked": "Secure Input memblokir peristiwa tombol — pintasan keyboard tidak dapat berfungsi sampai masalah ini diselesaikan.",
         "verdictSuspicious": "Peristiwa tombol pengubah diterima, tetapi tidak ada peristiwa tombol — sesuatu memblokir input tombol meskipun Secure Input dilaporkan nonaktif. Harap laporkan ini di GitHub.",
-        "verdictOk": "Peristiwa tombol mencapai Handy secara normal.",
+        "verdictOk": "Peristiwa tombol mencapai IntegraPrompt secara normal.",
         "verdictNoEvents": "Tidak ada peristiwa yang tertangkap — apakah Anda menekan tombol selama pengujian?",
         "failed": "Diagnostik gagal: {{error}}"
       }
@@ -604,15 +604,15 @@
       "title": "Tentang",
       "version": {
         "title": "Versi",
-        "description": "Versi Handy saat ini"
+        "description": "Versi IntegraPrompt saat ini"
       },
       "whatsNewUpdates": {
         "label": "Tampilkan Yang Baru",
-        "description": "Tampilkan catatan rilis setelah Handy diperbarui"
+        "description": "Tampilkan catatan rilis setelah IntegraPrompt diperbarui"
       },
       "appDataDirectory": {
         "title": "Direktori Data Aplikasi",
-        "description": "Lokasi Handy menyimpan datanya"
+        "description": "Lokasi IntegraPrompt menyimpan datanya"
       },
       "sourceCode": {
         "title": "Kode Sumber",
@@ -620,16 +620,16 @@
         "button": "Lihat di GitHub"
       },
       "supportDevelopment": {
-        "title": "Dukung Pengembangan",
-        "description": "Bantu kami terus mengembangkan Handy",
-        "button": "Donasi"
+        "title": "Based on Handy",
+        "description": "IntegraPrompt is a fork of Handy by CJ Pais (MIT license)",
+        "button": "View Handy"
       },
       "acknowledgments": {
         "title": "Ucapan Terima Kasih",
         "ggml": {
           "title": "ggml",
           "description": "Pustaka tensor berkinerja tinggi untuk inferensi pembelajaran mesin di perangkat",
-          "details": "Fitur ucapan-ke-teks lokal Handy dibangun menggunakan transcribe.cpp dan ggml. Terima kasih kepada Georgi Gerganov dan para kontributor atas karya luar biasa mereka."
+          "details": "Fitur ucapan-ke-teks lokal IntegraPrompt dibangun menggunakan transcribe.cpp dan ggml. Terima kasih kepada Georgi Gerganov dan para kontributor atas karya luar biasa mereka."
         }
       }
     }
@@ -650,7 +650,7 @@
     "portableUpdateBrowseButton": "Buka GitHub Releases"
   },
   "whatsNew": {
-    "title": "Baru di Handy v{{version}}"
+    "title": "Baru di IntegraPrompt v{{version}}"
   },
   "common": {
     "loading": "Memuat...",
@@ -663,7 +663,7 @@
     "noOptionsFound": "Tidak ada opsi yang ditemukan"
   },
   "accessibility": {
-    "permissionsDescription": "Handy memerlukan izin aksesibilitas untuk mengetik teks hasil transkripsi.",
+    "permissionsDescription": "IntegraPrompt memerlukan izin aksesibilitas untuk mengetik teks hasil transkripsi.",
     "openSettings": "Buka Pengaturan Sistem"
   },
   "errors": {
@@ -706,11 +706,11 @@
   },
   "appLanguage": {
     "title": "Bahasa Aplikasi",
-    "description": "Ubah bahasa antarmuka Handy"
+    "description": "Ubah bahasa antarmuka IntegraPrompt"
   },
   "theme": {
     "title": "Tema Aplikasi",
-    "description": "Pilih apakah Handy mengikuti tema sistem atau selalu menggunakan tema terang atau gelap",
+    "description": "Pilih apakah IntegraPrompt mengikuti tema sistem atau selalu menggunakan tema terang atau gelap",
     "options": {
       "system": "Sistem",
       "light": "Terang",

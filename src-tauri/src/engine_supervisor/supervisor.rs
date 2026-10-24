@@ -1369,7 +1369,7 @@ fn record_launched_exe() {
                 let id = file_id(&path)?;
                 Ok((path, id))
             })
-            .inspect_err(|e| warn!("Could not identify Handy's executable: {}", e))
+            .inspect_err(|e| warn!("Could not identify the IntegraPrompt executable: {}", e))
             .ok()
     });
 }
@@ -1388,7 +1388,7 @@ fn worker_exe() -> io::Result<PathBuf> {
     if let Some((path, launched)) = LAUNCHED_EXE.get().and_then(Option::as_ref) {
         if file_id(path).ok().as_ref() != Some(launched) {
             return Err(io::Error::other(
-                "Handy was updated or moved while it was running; restart Handy",
+                "IntegraPrompt was updated or moved while it was running; restart IntegraPrompt",
             ));
         }
     }

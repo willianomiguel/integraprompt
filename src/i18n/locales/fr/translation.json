@@ -28,7 +28,7 @@
     "customModelDescription": "Non officiellement pris en charge",
     "migration": {
       "title": "Vos modèles doivent être mis à jour",
-      "description": "Handy utilise désormais un nouveau type de modèle. Téléchargez la nouvelle version pour continuer à transcrire. Les anciennes versions seront supprimées.",
+      "description": "IntegraPrompt utilise désormais un nouveau type de modèle. Téléchargez la nouvelle version pour continuer à transcrire. Les anciennes versions seront supprimées.",
       "replaces": "Remplace {{name}}",
       "oldFormat": "Ancien format",
       "failed": "Échec du téléchargement",
@@ -69,7 +69,7 @@
     },
     "permissions": {
       "title": "Autorisations requises",
-      "description": "Handy a besoin de quelques autorisations pour fonctionner correctement.",
+      "description": "IntegraPrompt a besoin de quelques autorisations pour fonctionner correctement.",
       "microphone": {
         "title": "Accès au microphone",
         "description": "Nécessaire pour entendre votre voix pour la transcription."
@@ -130,7 +130,7 @@
       "deleteActiveConfirm": "{{modelName}} est votre modèle actif. Le supprimer arrêtera les transcriptions jusqu'à ce que vous sélectionniez un nouveau modèle. Êtes-vous sûr ?",
       "deleteTitle": "Supprimer le modèle",
       "retiredNotice": {
-        "title": "Les anciens modèles ne fonctionnent plus avec Handy",
+        "title": "Les anciens modèles ne fonctionnent plus avec IntegraPrompt",
         "description": "Ils occupent {{size}} sur votre ordinateur.",
         "delete": "Supprimer les modèles",
         "deleted": "Anciens modèles supprimés",
@@ -147,13 +147,13 @@
       "searchPlaceholder": "Rechercher des modèles par nom…",
       "rescan": {
         "label": "Réanalyser",
-        "tooltip": "Réanalyser pour détecter les modèles ajoutés au dossier des modèles ou au cache Hugging Face en dehors de Handy"
+        "tooltip": "Réanalyser pour détecter les modèles ajoutés au dossier des modèles ou au cache Hugging Face en dehors de IntegraPrompt"
       }
     },
     "general": {
       "title": "Général",
       "shortcut": {
-        "title": "Raccourcis Handy",
+        "title": "Raccourcis IntegraPrompt",
         "description": "Configurer les raccourcis clavier pour déclencher l'enregistrement de la reconnaissance vocale",
         "loading": "Chargement des raccourcis...",
         "none": "Aucun raccourci configuré",
@@ -261,11 +261,11 @@
       },
       "autostart": {
         "label": "Lancer au démarrage",
-        "description": "Démarrer automatiquement Handy lorsque vous vous connectez à votre ordinateur."
+        "description": "Démarrer automatiquement IntegraPrompt lorsque vous vous connectez à votre ordinateur."
       },
       "showTrayIcon": {
         "label": "Afficher l'icône de la barre",
-        "description": "Afficher l'icône de Handy dans la barre système."
+        "description": "Afficher l'icône de IntegraPrompt dans la barre système."
       },
       "overlay": {
         "style": {
@@ -489,7 +489,7 @@
       },
       "updateChecks": {
         "label": "Vérifier les mises à jour",
-        "description": "Vérifier automatiquement les nouvelles versions de Handy",
+        "description": "Vérifier automatiquement les nouvelles versions de IntegraPrompt",
         "lockedDescription": "Désactivé par la configuration système (HANDY_DISABLE_UPDATER)"
       },
       "soundTheme": {
@@ -567,7 +567,7 @@
       },
       "keyboardDiagnostic": {
         "title": "Diagnostic du clavier",
-        "description": "Vérifie si les événements clavier atteignent Handy. Seul le nombre d'événements est enregistré, jamais les touches sur lesquelles vous appuyez.",
+        "description": "Vérifie si les événements clavier atteignent IntegraPrompt. Seul le nombre d'événements est enregistré, jamais les touches sur lesquelles vous appuyez.",
         "run": "Lancer un diagnostic de 10 s",
         "running": "Écoute en cours… appuyez plusieurs fois sur votre raccourci (par ex. Option+Space)",
         "secureInputLabel": "Secure Input",
@@ -581,7 +581,7 @@
         "mouse": "Souris",
         "verdictBlocked": "Secure Input bloque les événements clavier : les raccourcis contenant une touche normale ne peuvent pas fonctionner tant que ce n'est pas résolu.",
         "verdictSuspicious": "Des événements de modificateurs sont arrivés, mais aucun événement de touche : quelque chose supprime les touches alors que Secure Input est signalé comme désactivé. Merci de le signaler sur GitHub.",
-        "verdictOk": "Les événements clavier atteignent Handy normalement.",
+        "verdictOk": "Les événements clavier atteignent IntegraPrompt normalement.",
         "verdictNoEvents": "Aucun événement capturé : avez-vous appuyé sur des touches pendant le test ?",
         "failed": "Échec du diagnostic : {{error}}"
       },
@@ -604,11 +604,11 @@
       "title": "À propos",
       "version": {
         "title": "Version",
-        "description": "Version actuelle de Handy"
+        "description": "Version actuelle de IntegraPrompt"
       },
       "appDataDirectory": {
         "title": "Emplacement des données de l'application",
-        "description": "Emplacement où Handy stocke ses données"
+        "description": "Emplacement où IntegraPrompt stocke ses données"
       },
       "sourceCode": {
         "title": "Code source",
@@ -616,21 +616,21 @@
         "button": "Voir sur GitHub"
       },
       "supportDevelopment": {
-        "title": "Soutenir le développement",
-        "description": "Aidez-nous à continuer à construire Handy",
-        "button": "Faire un don"
+        "title": "Based on Handy",
+        "description": "IntegraPrompt is a fork of Handy by CJ Pais (MIT license)",
+        "button": "View Handy"
       },
       "acknowledgments": {
         "title": "Remerciements",
         "ggml": {
           "title": "ggml",
           "description": "Inférence haute performance du modèle de reconnaissance vocale automatique Whisper d'OpenAI",
-          "details": "Handy utilise ggml pour un traitement rapide et local de la parole en texte. Merci au travail incroyable de Georgi Gerganov et des contributeurs."
+          "details": "IntegraPrompt utilise ggml pour un traitement rapide et local de la parole en texte. Merci au travail incroyable de Georgi Gerganov et des contributeurs."
         }
       },
       "whatsNewUpdates": {
         "label": "Afficher les nouveautés",
-        "description": "Afficher les notes de version après les mises à jour de Handy"
+        "description": "Afficher les notes de version après les mises à jour de IntegraPrompt"
       }
     }
   },
@@ -660,7 +660,7 @@
     "noOptionsFound": "Aucune option trouvée"
   },
   "accessibility": {
-    "permissionsDescription": "Handy a besoin des autorisations d'accessibilité pour taper le texte transcrit.",
+    "permissionsDescription": "IntegraPrompt a besoin des autorisations d'accessibilité pour taper le texte transcrit.",
     "openSettings": "Ouvrir les Préférences Système"
   },
   "errors": {
@@ -703,11 +703,11 @@
   },
   "appLanguage": {
     "title": "Langue de l'application",
-    "description": "Changer la langue de l'interface de Handy"
+    "description": "Changer la langue de l'interface de IntegraPrompt"
   },
   "theme": {
     "title": "Thème de l'application",
-    "description": "Choisissez si Handy suit le thème du système ou reste clair ou sombre",
+    "description": "Choisissez si IntegraPrompt suit le thème du système ou reste clair ou sombre",
     "options": {
       "system": "Système",
       "light": "Clair",
@@ -720,7 +720,7 @@
     "loadingModel": "Chargement du modèle..."
   },
   "whatsNew": {
-    "title": "Nouveautés de Handy v{{version}}"
+    "title": "Nouveautés de IntegraPrompt v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} bloque peut-être 1 raccourci",

@@ -159,7 +159,7 @@ mockIPC((cmd, args = {}) => {
     };
   if (cmd === "plugin:os|locale") return "pt-BR";
   if (cmd === "plugin:app|version") return "0.9.8";
-  if (cmd === "plugin:app|name") return "VozPrompt";
+  if (cmd === "plugin:app|name") return "IntegraPrompt";
   if (cmd === "plugin:event|listen") return 1;
   if (cmd === "is_update_checking_disabled") return true;
   if (cmd === "local_ai_installed") return true;

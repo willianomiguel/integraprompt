@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import markUrl from "../../assets/brand/vozprompt-mark.png";
-const BRAND_NAME = "VozPrompt";
+import markUrl from "../../assets/brand/integraprompt-mark.png";
+const BRAND_NAME = "IntegraPrompt";
 
 const HandyTextLogo = ({
   width = 160,
@@ -13,8 +13,8 @@ const HandyTextLogo = ({
 }) => (
   <div
     role="img"
-    aria-label="VozPrompt"
-    className={`vozprompt-logo ${className ?? ""}`}
+    aria-label="IntegraPrompt"
+    className={`integraprompt-logo ${className ?? ""}`}
     style={{
       display: "inline-flex",
       alignItems: "center",
@@ -22,7 +22,7 @@ const HandyTextLogo = ({
       width,
       height,
       maxWidth: "100%",
-      fontSize: width * 0.13,
+      fontSize: width * 0.105,
       lineHeight: 1,
       color: "var(--color-text)",
     }}

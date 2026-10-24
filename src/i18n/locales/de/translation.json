@@ -28,7 +28,7 @@
     "customModelDescription": "Nicht offiziell unterstützt",
     "migration": {
       "title": "Deine Modelle brauchen ein Update",
-      "description": "Handy verwendet jetzt eine neuere Art von Modellen. Lade die neue Version herunter, um weiter zu transkribieren. Alte Versionen werden entfernt.",
+      "description": "IntegraPrompt verwendet jetzt eine neuere Art von Modellen. Lade die neue Version herunter, um weiter zu transkribieren. Alte Versionen werden entfernt.",
       "replaces": "Ersetzt {{name}}",
       "oldFormat": "Altes Format",
       "failed": "Download fehlgeschlagen",
@@ -69,7 +69,7 @@
     },
     "permissions": {
       "title": "Berechtigungen erforderlich",
-      "description": "Handy benötigt einige Berechtigungen, um richtig zu funktionieren.",
+      "description": "IntegraPrompt benötigt einige Berechtigungen, um richtig zu funktionieren.",
       "microphone": {
         "title": "Mikrofonzugriff",
         "description": "Erforderlich, um deine Stimme für die Transkription zu hören."
@@ -130,7 +130,7 @@
       "deleteActiveConfirm": "{{modelName}} ist dein aktives Modell. Das Löschen stoppt Transkriptionen, bis du ein neues Modell auswählst. Bist du sicher?",
       "deleteTitle": "Modell löschen",
       "retiredNotice": {
-        "title": "Alte Modelle funktionieren nicht mehr mit Handy",
+        "title": "Alte Modelle funktionieren nicht mehr mit IntegraPrompt",
         "description": "Sie belegen {{size}} auf deinem Computer.",
         "delete": "Modelle löschen",
         "deleted": "Alte Modelle gelöscht",
@@ -147,13 +147,13 @@
       "searchPlaceholder": "Modelle nach Namen suchen…",
       "rescan": {
         "label": "Neu scannen",
-        "tooltip": "Erneut nach Modellen scannen, die außerhalb von Handy zum Modellordner oder Hugging-Face-Cache hinzugefügt wurden"
+        "tooltip": "Erneut nach Modellen scannen, die außerhalb von IntegraPrompt zum Modellordner oder Hugging-Face-Cache hinzugefügt wurden"
       }
     },
     "general": {
       "title": "Allgemein",
       "shortcut": {
-        "title": "Handy-Tastenkürzel",
+        "title": "IntegraPrompt-Tastenkürzel",
         "description": "Tastenkürzel für die Sprachaufnahme konfigurieren",
         "loading": "Tastenkürzel werden geladen...",
         "none": "Keine Tastenkürzel konfiguriert",
@@ -261,11 +261,11 @@
       },
       "autostart": {
         "label": "Beim Start ausführen",
-        "description": "Handy automatisch beim Anmelden starten."
+        "description": "IntegraPrompt automatisch beim Anmelden starten."
       },
       "showTrayIcon": {
         "label": "Taskleistensymbol anzeigen",
-        "description": "Das Handy-Symbol in der Taskleiste anzeigen."
+        "description": "Das IntegraPrompt-Symbol in der Taskleiste anzeigen."
       },
       "overlay": {
         "style": {
@@ -489,7 +489,7 @@
       },
       "updateChecks": {
         "label": "Nach Updates suchen",
-        "description": "Automatisch nach neuen Versionen von Handy suchen",
+        "description": "Automatisch nach neuen Versionen von IntegraPrompt suchen",
         "lockedDescription": "Durch Systemkonfiguration deaktiviert (HANDY_DISABLE_UPDATER)"
       },
       "soundTheme": {
@@ -567,7 +567,7 @@
       },
       "keyboardDiagnostic": {
         "title": "Tastatur-Diagnose",
-        "description": "Prüft, ob Tastaturereignisse Handy erreichen. Es wird nur die Anzahl der Ereignisse erfasst — niemals, welche Tasten du drückst.",
+        "description": "Prüft, ob Tastaturereignisse IntegraPrompt erreichen. Es wird nur die Anzahl der Ereignisse erfasst — niemals, welche Tasten du drückst.",
         "run": "10-Sekunden-Diagnose starten",
         "running": "Lauscht… drücke dein Tastenkürzel ein paar Mal (z. B. Option+Space)",
         "secureInputLabel": "Secure Input",
@@ -581,7 +581,7 @@
         "mouse": "Maus",
         "verdictBlocked": "Secure Input blockiert Tastenereignisse — Tastenkürzel mit einer normalen Taste können erst wieder funktionieren, wenn das behoben ist.",
         "verdictSuspicious": "Es kamen Modifikator-Ereignisse an, aber keine Tastenereignisse — irgendetwas unterdrückt Tasten, obwohl Secure Input als deaktiviert gemeldet wird. Bitte melde das auf GitHub.",
-        "verdictOk": "Tastenereignisse erreichen Handy normal.",
+        "verdictOk": "Tastenereignisse erreichen IntegraPrompt normal.",
         "verdictNoEvents": "Keine Ereignisse erfasst — hast du während des Tests Tasten gedrückt?",
         "failed": "Diagnose fehlgeschlagen: {{error}}"
       },
@@ -604,11 +604,11 @@
       "title": "Info",
       "version": {
         "title": "Version",
-        "description": "Aktuelle Version von Handy"
+        "description": "Aktuelle Version von IntegraPrompt"
       },
       "appDataDirectory": {
         "title": "App-Datenverzeichnis",
-        "description": "Speicherort der Handy-Daten"
+        "description": "Speicherort der IntegraPrompt-Daten"
       },
       "sourceCode": {
         "title": "Quellcode",
@@ -616,21 +616,21 @@
         "button": "Auf GitHub ansehen"
       },
       "supportDevelopment": {
-        "title": "Entwicklung unterstützen",
-        "description": "Hilf uns, Handy weiterzuentwickeln",
-        "button": "Spenden"
+        "title": "Based on Handy",
+        "description": "IntegraPrompt is a fork of Handy by CJ Pais (MIT license)",
+        "button": "View Handy"
       },
       "acknowledgments": {
         "title": "Danksagungen",
         "ggml": {
           "title": "ggml",
           "description": "Hochleistungs-Inferenz des Whisper-Spracherkennungsmodells von OpenAI",
-          "details": "Handy verwendet ggml für schnelle, lokale Sprach-zu-Text-Verarbeitung. Dank an Georgi Gerganov und die Mitwirkenden für ihre großartige Arbeit."
+          "details": "IntegraPrompt verwendet ggml für schnelle, lokale Sprach-zu-Text-Verarbeitung. Dank an Georgi Gerganov und die Mitwirkenden für ihre großartige Arbeit."
         }
       },
       "whatsNewUpdates": {
         "label": "Neuerungen anzeigen",
-        "description": "Versionshinweise nach Handy-Updates anzeigen"
+        "description": "Versionshinweise nach IntegraPrompt-Updates anzeigen"
       }
     }
   },
@@ -660,7 +660,7 @@
     "noOptionsFound": "Keine Optionen gefunden"
   },
   "accessibility": {
-    "permissionsDescription": "Handy benötigt Bedienungshilfen-Berechtigungen, um transkribierten Text einzugeben.",
+    "permissionsDescription": "IntegraPrompt benötigt Bedienungshilfen-Berechtigungen, um transkribierten Text einzugeben.",
     "openSettings": "Systemeinstellungen öffnen"
   },
   "errors": {
@@ -703,11 +703,11 @@
   },
   "appLanguage": {
     "title": "Anwendungssprache",
-    "description": "Sprache der Handy-Oberfläche ändern"
+    "description": "Sprache der IntegraPrompt-Oberfläche ändern"
   },
   "theme": {
     "title": "Anwendungsdesign",
-    "description": "Wählen Sie, ob Handy dem Systemthema folgt oder hell bzw. dunkel bleibt",
+    "description": "Wählen Sie, ob IntegraPrompt dem Systemthema folgt oder hell bzw. dunkel bleibt",
     "options": {
       "system": "System",
       "light": "Hell",
@@ -720,7 +720,7 @@
     "loadingModel": "Modell wird geladen..."
   },
   "whatsNew": {
-    "title": "Neu in Handy v{{version}}"
+    "title": "Neu in IntegraPrompt v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} blockiert möglicherweise 1 Tastenkürzel",

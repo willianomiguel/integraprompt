@@ -1,90 +1,64 @@
-# Arquitetura (base: Handy 0.9.8)
+# Arquitetura
 
-Resumo do que o VozPrompt herda do [Handy](https://github.com/cjpais/Handy) e de onde o código novo se encaixa.
-Escrito na Fase 0, antes de qualquer alteração.
+O IntegraPrompt é um fork do [Handy](https://github.com/cjpais/Handy) (Tauri 2: backend Rust + frontend React/TypeScript). O código novo fica isolado em módulos próprios para facilitar o merge do upstream. Para sincronizar: `git fetch upstream && git merge upstream/main`.
 
-## Visão geral
+## Mapa de pastas
 
-Tauri 2: backend Rust em `src-tauri/src`, frontend React + TypeScript + Tailwind em `src`.
-Frontend → backend por comandos Tauri (tipados via `tauri-specta`, gerados em `src/bindings.ts`);
-backend → frontend por eventos (`app.emit`). Estado do frontend em Zustand (`src/stores/settingsStore.ts`).
+```
+integraprompt/
+├── src/                         Frontend React + TypeScript + Tailwind
+│   ├── components/              Telas e componentes (settings/, onboarding/, ui/ ...)
+│   ├── vozprompt/               NOVO: painel da IA local
+│   ├── overlay/                 Janela de gravação (popup)
+│   ├── i18n/locales/            Traduções (25 idiomas; en é a fonte, pt completo)
+│   ├── stores/, hooks/, lib/    Estado (Zustand), hooks e utilitários
+│   ├── styles/                  Tema, cores de destaque e layout
+│   └── bindings.ts              Gerado pelo tauri-specta (não editar à mão)
+├── src-tauri/
+│   ├── src/                     Backend do Handy + ligações do IntegraPrompt
+│   │   ├── actions.rs           Fluxo gravar → transcrever → (IA) → colar
+│   │   ├── settings.rs          Configurações e provedores
+│   │   ├── shortcut/            Atalhos globais
+│   │   ├── managers/            Áudio, modelos, transcrição, histórico
+│   │   └── vozprompt_local.rs   NOVO: sobe/baixa a IA local
+│   ├── vozprompt-core/          NOVO: lógica pura, sem Tauri (crate testável)
+│   │   ├── prompts/*.txt        Textos dos 5 modelos de prompt
+│   │   └── src/                 template, provider, pipeline, templates, cli, local, secrets, error
+│   └── tauri.conf.json          Nome, identificador, bundle e updater
+├── docs/                        Esta documentação
+├── scripts/                     Checagens (traduções, catálogo) e captura do README
+├── tests/                       Playwright
+└── .github/                     CI e templates
+```
 
-## Fluxo gravação → transcrição → colagem
+## Fluxo do modo Prompt
 
-1. **Atalho global**: `shortcut/` (duas implementações, `tauri_impl.rs` e `handy_keys.rs`) chama
-   `shortcut/handler.rs::handle_shortcut_event`. Bindings de transcrição (`transcribe`,
-   `transcribe_with_post_process`) vão para o `TranscriptionCoordinator`
-   (`transcription_coordinator.rs`), que aplica o modo de ativação (alternar / segurar / híbrido) e chama
-   `ACTION_MAP[binding].start/stop` (`actions.rs`).
-2. **Gravar** (`TranscribeAction::start`): carrega o modelo em background, abre o microfone
-   (`managers/audio.rs`), mostra o overlay (`overlay.rs`), toca som e troca o ícone da bandeja (`tray.rs`).
-3. **Parar** (`TranscribeAction::stop`): pega as amostras, salva o WAV em paralelo, transcreve
-   (`managers/transcription.rs`, motor `transcribe-cpp`: Whisper, Parakeet etc.).
-4. **Pós-processamento**: `actions.rs::process_transcription_output` → `post_process_transcription`
-   (só se o binding é `transcribe_with_post_process` **e** `post_process_enabled`). Monta o prompt, chama
-   `llm_client.rs` e devolve `ProcessedTranscription { final_text, post_processed_text, post_process_prompt }`.
-   Qualquer falha devolve `None` (cola a transcrição bruta, só com log; sem aviso ao usuário).
-5. **Histórico**: `managers/history.rs` (SQLite com `rusqlite_migration`): `save_entry` guarda texto bruto,
-   texto pós-processado e o prompt usado.
-6. **Colar**: `utils::paste(final_text)` → `clipboard.rs` / `paste_tx/` (Ctrl+V simulado, digitação direta etc.).
+1. O **atalho global** (`shortcut/`) chama `TranscribeAction` em `actions.rs`.
+2. Grava o áudio (`managers/audio.rs`) e transcreve localmente (`managers/transcription.rs`, motor transcribe-cpp).
+3. No atalho de Prompt, `actions.rs::post_process_vozprompt` escolhe o provedor e chama o `vozprompt-core`:
+   - **Provedor de API** (OpenAI, Anthropic, Groq, OpenRouter, Custom/Ollama): `pipeline::process` monta as mensagens (`template`), chama o adaptador (`provider`) com timeout e devolve o texto.
+   - **IA local**: `vozprompt_local.rs` garante o `llama-server` no ar (`local`) e usa o mesmo caminho de API em `127.0.0.1`.
+   - **CLI** (Claude Code, Codex): `cli::generate` roda o programa oficial sem shell, com o texto no stdin.
+4. **Falhou?** Qualquer erro devolve a transcrição bruta e emite o evento `post-process-error`; o frontend mostra o motivo. Nunca se perde a fala.
+5. O texto final é colado (`clipboard.rs`, `paste_tx/`) e a entrada vai para o histórico (`managers/history.rs`).
 
-## Pós-processamento com LLM (estado herdado)
+## O que o `vozprompt-core` faz
 
-- `settings.rs`: `PostProcessProvider` (id, base_url, `api_format` OpenAi | Anthropic, `models_endpoint`),
-  `post_process_providers/models/api_keys/prompts`. Já existem presets OpenAI, Z.AI, OpenRouter, Anthropic,
-  Groq, Cerebras, Bedrock e "Custom" (que serve para Ollama).
-- `llm_client.rs`: cliente OpenAI-compatível + adaptador Anthropic Messages + `fetch_models`.
-- UI: `components/settings/post-processing/` (aba só aparece com `post_process_enabled`) e o toggle
-  em `settings/advanced/AdvancedSettings.tsx` (rótulo no namespace `settings.debug.*`).
-- As chaves ficam em **texto puro** em `settings.json` (`SecretMap` só as oculta dos logs).
-- O prompt padrão é um "limpador de transcrição", não um gerador de prompts; usa `${output}`.
+| Módulo | Função |
+| --- | --- |
+| `template` | Monta system/user a partir do modelo e da variável `{{transcricao}}` |
+| `provider` | Requisições e respostas OpenAI-compatível e Anthropic nativo; lista de modelos; teste de conexão |
+| `pipeline` | Timeout (20 s remoto, 120 s local) e fallback para a transcrição bruta |
+| `templates` | Biblioteca dos 5 modelos: criar, duplicar, excluir, exportar e importar JSON |
+| `cli` | Adaptadores do Claude Code e do Codex ([detalhes](CLI-PROMPTS.md)) |
+| `local` | Download e execução do llama-server + Qwen2.5 1.5B |
+| `secrets` | Cofre do sistema (`keyring`) para chaves de API |
+| `error` | `AiError` com códigos estáveis usados como chave de tradução |
 
 ## Configurações
 
-`tauri-plugin-store`, arquivo `settings.json` (caminho resolvido por `portable.rs`), chave `settings`
-(struct `AppSettings`, `serde(default)` em tudo). `get_settings` / `write_settings` em `settings.rs`;
-migrações pontuais em `apply_settings_migrations`. O frontend lê/escreve por comandos `change_*_setting`
-(`shortcut/mod.rs`) e pelo hook `hooks/useSettings.ts`.
+`tauri-plugin-store` (arquivo `settings_store.json` na pasta de dados do app). O frontend usa comandos `change_*_setting` e o hook `useSettings`. O pós-processamento fica sempre ligado.
 
-## Atalhos
+## Pontos que ainda não estão ligados
 
-`bindings: HashMap<String, ShortcutBinding>` com padrões em `get_default_settings`. O modo
-(`ShortcutActivation`: Toggle / PushToTalk / HoldOrToggle) é **global**, um valor para todos os bindings.
-Há também o `cancel` dinâmico (registrado só enquanto grava).
-
-## Menu de debug
-
-`Ctrl+Shift+D` (Cmd no Mac) liga `debug_mode`, que habilita a aba `debug` (`components/Sidebar.tsx`).
-O rótulo do toggle de pós-processamento vive no namespace `settings.debug.*`.
-
-## Overlay
-
-Janela própria (`overlay.rs`, frontend em `src/overlay/RecordingOverlay.tsx`). Estados pelo evento
-`show-overlay` com string: `recording`, `transcribing`, `processing`. Variante "live" para modelos com streaming.
-
-## Bandeja
-
-`tray.rs`: menu reconstruído por `build_menu` (ícone por estado, cancelar, copiar última transcrição,
-descarregar modelo, configurações, atualizações, sair). Strings em `tray_i18n.rs`.
-
-## i18n
-
-`i18next` no frontend (`src/i18n/locales/<idioma>/translation.json`, fonte: `en`; ESLint proíbe texto fixo
-em JSX; `bun run check:translations` compara chaves). Já existe `pt`. Backend: `tray_i18n.rs`.
-
-## Distribuição herdada
-
-`tauri.conf.json` (updater com chave pública do Handy apontando para os Releases do Handy, assinatura
-Azure Trusted Signing do autor), workflows em `.github/workflows/` (build, release, testes, nix, playwright).
-**Nada disso pode ser reaproveitado como está** (ver Fase 5 e `DECISIONS.md`).
-
-## Onde entra o código novo do VozPrompt
-
-| Área | Local | Toque no núcleo |
-|---|---|---|
-| Lógica nova (template, provedores, cofre, modelos, pipeline) | `src-tauri/src/vozprompt/` | 1 linha em `lib.rs` (`mod` + comandos) |
-| Gancho do pipeline | `actions.rs::process_transcription_output` chama `vozprompt::pipeline` | ~20 linhas |
-| Modo por atalho | `shortcut/handler.rs` + 1 campo em `AppSettings` | pequeno |
-| Chaves no cofre | `settings.rs` (`write_settings`/carga) chamam `vozprompt::secrets` | pequeno |
-| UI nova | `src/vozprompt/` + novas entradas em `Sidebar.tsx` | pequeno |
-| Textos | chaves novas em `locales/en` e `locales/pt` | só adições |
+O módulo `secrets` existe e tem testes, mas as chaves ainda são salvas em texto puro no arquivo de configurações. Veja [ROADMAP.md](ROADMAP.md).

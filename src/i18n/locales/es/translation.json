@@ -28,7 +28,7 @@
     "customModelDescription": "Sin soporte oficial",
     "migration": {
       "title": "Tus modelos necesitan una actualización",
-      "description": "Handy ahora usa un tipo de modelo más nuevo. Descarga la nueva versión para seguir transcribiendo. Las versiones antiguas se eliminarán.",
+      "description": "IntegraPrompt ahora usa un tipo de modelo más nuevo. Descarga la nueva versión para seguir transcribiendo. Las versiones antiguas se eliminarán.",
       "replaces": "Reemplaza a {{name}}",
       "oldFormat": "Formato antiguo",
       "failed": "Error en la descarga",
@@ -69,7 +69,7 @@
     },
     "permissions": {
       "title": "Permisos requeridos",
-      "description": "Handy necesita algunos permisos para funcionar correctamente.",
+      "description": "IntegraPrompt necesita algunos permisos para funcionar correctamente.",
       "microphone": {
         "title": "Acceso al micrófono",
         "description": "Necesario para escuchar tu voz para la transcripción."
@@ -130,7 +130,7 @@
       "deleteActiveConfirm": "{{modelName}} es tu modelo activo. Eliminarlo detendrá las transcripciones hasta que selecciones un nuevo modelo. ¿Estás seguro?",
       "deleteTitle": "Eliminar modelo",
       "retiredNotice": {
-        "title": "Los modelos antiguos ya no funcionan con Handy",
+        "title": "Los modelos antiguos ya no funcionan con IntegraPrompt",
         "description": "Ocupan {{size}} en tu equipo.",
         "delete": "Eliminar modelos",
         "deleted": "Modelos antiguos eliminados",
@@ -147,13 +147,13 @@
       "searchPlaceholder": "Buscar modelos por nombre…",
       "rescan": {
         "label": "Volver a escanear",
-        "tooltip": "Vuelve a escanear en busca de modelos añadidos a la carpeta de modelos o a la caché de Hugging Face fuera de Handy"
+        "tooltip": "Vuelve a escanear en busca de modelos añadidos a la carpeta de modelos o a la caché de Hugging Face fuera de IntegraPrompt"
       }
     },
     "general": {
       "title": "General",
       "shortcut": {
-        "title": "Atajos de Handy",
+        "title": "Atajos de IntegraPrompt",
         "description": "Configura atajos de teclado para activar la grabación de voz a texto",
         "loading": "Cargando atajos...",
         "none": "No hay atajos configurados",
@@ -261,11 +261,11 @@
       },
       "autostart": {
         "label": "Iniciar al arranque",
-        "description": "Iniciar Handy automáticamente cuando inicies sesión en tu computadora."
+        "description": "Iniciar IntegraPrompt automáticamente cuando inicies sesión en tu computadora."
       },
       "showTrayIcon": {
         "label": "Mostrar icono de bandeja",
-        "description": "Mostrar el icono de Handy en la bandeja del sistema."
+        "description": "Mostrar el icono de IntegraPrompt en la bandeja del sistema."
       },
       "overlay": {
         "style": {
@@ -489,7 +489,7 @@
       },
       "updateChecks": {
         "label": "Buscar actualizaciones",
-        "description": "Buscar automáticamente nuevas versiones de Handy",
+        "description": "Buscar automáticamente nuevas versiones de IntegraPrompt",
         "lockedDescription": "Deshabilitado por la configuración del sistema (HANDY_DISABLE_UPDATER)"
       },
       "soundTheme": {
@@ -567,7 +567,7 @@
       },
       "keyboardDiagnostic": {
         "title": "Diagnóstico del teclado",
-        "description": "Comprueba si los eventos de teclado llegan a Handy. Solo se registra el número de eventos, nunca qué teclas pulsas.",
+        "description": "Comprueba si los eventos de teclado llegan a IntegraPrompt. Solo se registra el número de eventos, nunca qué teclas pulsas.",
         "run": "Ejecutar diagnóstico de 10 s",
         "running": "Escuchando… pulsa tu atajo varias veces (p. ej. Option+Space)",
         "secureInputLabel": "Secure Input",
@@ -581,7 +581,7 @@
         "mouse": "Ratón",
         "verdictBlocked": "Secure Input está bloqueando los eventos de teclado: los atajos que incluyen una tecla normal no pueden funcionar hasta que se resuelva.",
         "verdictSuspicious": "Llegaron eventos de modificadores, pero ningún evento de tecla: algo está suprimiendo las teclas aunque Secure Input aparezca como desactivado. Por favor, repórtalo en GitHub.",
-        "verdictOk": "Los eventos de teclado llegan a Handy con normalidad.",
+        "verdictOk": "Los eventos de teclado llegan a IntegraPrompt con normalidad.",
         "verdictNoEvents": "No se capturó ningún evento: ¿pulsaste alguna tecla durante la prueba?",
         "failed": "El diagnóstico falló: {{error}}"
       },
@@ -604,11 +604,11 @@
       "title": "Acerca de",
       "version": {
         "title": "Versión",
-        "description": "Versión actual de Handy"
+        "description": "Versión actual de IntegraPrompt"
       },
       "appDataDirectory": {
         "title": "Directorio de datos de la aplicación",
-        "description": "Ubicación donde Handy almacena sus datos"
+        "description": "Ubicación donde IntegraPrompt almacena sus datos"
       },
       "sourceCode": {
         "title": "Código fuente",
@@ -616,21 +616,21 @@
         "button": "Ver en GitHub"
       },
       "supportDevelopment": {
-        "title": "Apoyar el desarrollo",
-        "description": "Ayúdanos a continuar construyendo Handy",
-        "button": "Donar"
+        "title": "Based on Handy",
+        "description": "IntegraPrompt is a fork of Handy by CJ Pais (MIT license)",
+        "button": "View Handy"
       },
       "acknowledgments": {
         "title": "Reconocimientos",
         "ggml": {
           "title": "ggml",
           "description": "Biblioteca de tensores de alto rendimiento para inferencia de aprendizaje automático en el dispositivo",
-          "details": "El habla a texto local de Handy está construido sobre transcribe.cpp y ggml. Gracias al increíble trabajo de Georgi Gerganov y colaboradores."
+          "details": "El habla a texto local de IntegraPrompt está construido sobre transcribe.cpp y ggml. Gracias al increíble trabajo de Georgi Gerganov y colaboradores."
         }
       },
       "whatsNewUpdates": {
         "label": "Mostrar novedades",
-        "description": "Mostrar notas de la versión después de las actualizaciones de Handy"
+        "description": "Mostrar notas de la versión después de las actualizaciones de IntegraPrompt"
       }
     }
   },
@@ -660,7 +660,7 @@
     "noOptionsFound": "No se encontraron opciones"
   },
   "accessibility": {
-    "permissionsDescription": "Handy necesita permisos de accesibilidad para escribir texto transcrito.",
+    "permissionsDescription": "IntegraPrompt necesita permisos de accesibilidad para escribir texto transcrito.",
     "openSettings": "Abrir Ajustes del Sistema"
   },
   "errors": {
@@ -703,11 +703,11 @@
   },
   "appLanguage": {
     "title": "Idioma de la aplicación",
-    "description": "Cambia el idioma de la interfaz de Handy"
+    "description": "Cambia el idioma de la interfaz de IntegraPrompt"
   },
   "theme": {
     "title": "Tema de la aplicación",
-    "description": "Elige si Handy sigue el tema del sistema o permanece claro u oscuro",
+    "description": "Elige si IntegraPrompt sigue el tema del sistema o permanece claro u oscuro",
     "options": {
       "system": "Sistema",
       "light": "Claro",
@@ -720,7 +720,7 @@
     "loadingModel": "Cargando modelo..."
   },
   "whatsNew": {
-    "title": "Nuevo en Handy v{{version}}"
+    "title": "Nuevo en IntegraPrompt v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} puede estar bloqueando 1 atajo",

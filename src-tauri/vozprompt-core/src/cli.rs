@@ -201,6 +201,10 @@ pub async fn generate(
                 "--tools",
                 "",
                 "--strict-mcp-config",
+                // Menos carga na partida: ignora hooks/plugins das configuracoes do usuario e skills.
+                "--setting-sources",
+                "project",
+                "--disable-slash-commands",
                 "--no-session-persistence",
                 "--restricted",
                 "--output-format",

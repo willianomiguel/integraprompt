@@ -1,172 +1,68 @@
 <div align="center">
-  <img src="src/assets/brand/vozprompt-mark.png" width="76" alt="Símbolo proposto do VozPrompt">
-  <h1>VozPrompt</h1>
+  <img src="src/assets/brand/integraprompt-mark.png" width="76" alt="IntegraPrompt">
+  <h1>IntegraPrompt</h1>
   <p><strong>Da voz ao texto. Da ideia ao prompt.</strong></p>
-  <p>Fale com naturalidade, organize com IA e continue trabalhando onde o cursor estiver.</p>
-  <p><a href="#veja-em-ação">Demonstração</a> · <a href="#comece-a-usar">Como usar</a> · <a href="#desenvolvimento">Desenvolvimento</a> · <a href="README.en.md">English</a></p>
+  <p>Segure um atalho, fale, solte. A fala é transcrita no seu computador e uma IA transforma o texto em um prompt pronto, colado onde o cursor estiver.</p>
+  <p><a href="#como-usar">Como usar</a> · <a href="#provedores-de-ia">Provedores</a> · <a href="#compilar">Compilar</a> · <a href="docs/ARCHITECTURE.md">Arquitetura</a> · <a href="README.en.md">English</a></p>
 </div>
 
-![Interface proposta do VozPrompt em tema claro e azul](docs/media/app-light.png)
+![Interface do IntegraPrompt](docs/media/app-light.png)
 
-> **Proposta de contribuição, ainda não publicada.** Este README descreve o checkout com as melhorias propostas, que ainda não estão na `main` pública. Build, instalação e inicialização foram verificados no Windows x64. A interface foi testada em navegador; macOS e Linux ainda precisam de build e QA nativos. [Avaliação completa](docs/CONTRIBUTION-REVIEW.md).
+> **Status:** em desenvolvimento, sem release publicada. Testado no Windows x64. macOS e Linux ainda precisam de build e testes. O que falta está em [docs/ROADMAP.md](docs/ROADMAP.md).
 
-O [VozPrompt / IntegraPrompt](https://github.com/willianomiguel/integraprompt), de **Willian Daniel**, transforma ditado em prompts com modelos locais ou provedores de IA. É um fork do [Handy](https://github.com/cjpais/Handy), de **CJ Pais**, que fornece a base de gravação, transcrição local, atalhos e colagem. Esta contribuição preserva esses créditos e a licença MIT.
+## Como usar
 
-## Veja em ação
+1. Abra o app e baixe um modelo de transcrição (Whisper, Parakeet etc.).
+2. Em **Pós-Processamento**, escolha o provedor, o modelo e um modelo de prompt.
+3. Use um dos dois atalhos (configuráveis em **Geral**):
 
-![Demonstração das opções de tema e cor](docs/media/appearance-demo.gif)
+| Atalho | O que faz | Padrão Windows/Linux | Padrão macOS |
+| --- | --- | --- | --- |
+| **Ditado** | Transcreve e cola o texto como foi dito | `Ctrl + Espaço` | `Option + Espaço` |
+| **Prompt** | Transcreve, manda para a IA e cola o prompt pronto | `Ctrl + Shift + Espaço` | `Option + Shift + Espaço` |
 
-_Demonstração da interface com dados fictícios e IPC simulado: alternância de temas e cores. Não é uma gravação de reconhecimento de voz nem uma prova do funcionamento nativo no Windows, macOS ou Linux. Os atalhos mostrados nas capturas são um perfil personalizado._
+Você usa **um** atalho por vez. O de Prompt já faz tudo: transcrever e melhorar. Os dois precisam ter teclas diferentes.
 
-| Claro                                   | Escuro                                  |
-| --------------------------------------- | --------------------------------------- |
-| ![Tela clara](docs/media/app-light.png) | ![Tela escura](docs/media/app-dark.png) |
+Se a IA falhar (sem internet, chave inválida, demora demais), o app cola a **transcrição original** e mostra o motivo. Você nunca perde o que falou.
 
-A proposta mantém a paleta rosa original como opção e acrescenta vermelho, laranja, amarelo, verde, azul claro, azul, índigo e violeta. Cada cor possui variações para os temas claro e escuro; a opção **Sistema** acompanha a preferência do sistema operacional.
+## Provedores de IA
 
-## Duas maneiras de usar sua voz
+| Opção | Precisa de | Observação |
+| --- | --- | --- |
+| **Local (offline)** | Download único de ~1,1 GB | IA pequena (Qwen2.5 1.5B) no seu PC, sem internet nem chave |
+| **Claude Code / Codex (CLI)** | CLI oficial instalado e logado | Usa a sua assinatura. Leva uns 6 s. Detalhes em [docs/CLI-PROMPTS.md](docs/CLI-PROMPTS.md) |
+| **OpenAI, Anthropic, Groq, OpenRouter** | Chave de API | Respostas em 1 a 2 s |
+| **Custom** | URL de uma API compatível com OpenAI | Funciona com Ollama (`http://localhost:11434/v1`) |
 
-| Você quer…                                      | Use…                                  | Resultado                                                               |
-| ----------------------------------------------- | ------------------------------------- | ----------------------------------------------------------------------- |
-| Escrever exatamente a ideia que ditou           | **Transcrição**                       | Texto reconhecido pelo modelo local                                     |
-| Transformar a ideia em uma instrução organizada | **Transcrição com pós-processamento** | Texto enviado ao provedor escolhido e estruturado pelo modelo de prompt |
+Limite de espera: 20 s para provedores remotos e 120 s para IA local.
 
-```mermaid
-flowchart LR
-  A[Atalho + voz] --> B[Transcrição local]
-  B --> C{Modo escolhido}
-  C -->|Ditado| D[Texto]
-  C -->|Prompt| E[IA local ou provedor escolhido]
-  E --> F[Prompt estruturado]
-  D --> G[Aplicativo em foco]
-  F --> G
-```
+## Modelos de prompt
 
-**Exemplo ilustrativo — não é um resultado de benchmark:**
+Vêm cinco prontos: **Geral, Programação, Imagem, Vídeo e Texto/copy**. Você edita, cria e escolhe o ativo em **Pós-Processamento**. Os textos-base ficam em [`src-tauri/vozprompt-core/prompts/`](src-tauri/vozprompt-core/prompts).
 
-> “Quero uma página simples para minha cafeteria. Precisa mostrar o cardápio, o endereço e um botão para falar no WhatsApp. O visual deve ser acolhedor.”
+## Privacidade
 
-```text
-Objetivo: criar uma página para uma cafeteria.
-Conteúdo: cardápio, endereço e contato pelo WhatsApp.
-Direção visual: acolhedora, simples e fácil de navegar.
-Entrega: estrutura da página e textos iniciais; indicar informações faltantes.
-```
+O áudio nunca sai do computador. Só o **texto transcrito** vai ao provedor que você escolher; com a IA local ou o Ollama, nada sai da máquina. Salvar o áudio gravado é opcional e vem desligado.
 
-A resposta real depende do modelo, do template e do que você disser. Os templates do projeto incluem **Geral, Programação, Imagem, Vídeo e Texto/copy**; você pode editar ou criar os seus.
+## Compilar
 
-## O que esta proposta acrescenta
-
-- **Interface mais clara:** diferencia ditado e prompt, reorganiza as preferências e melhora o enquadramento.
-- **Aparência pessoal:** nove cores, claro/escuro/sistema, preferências salvas em disco e sincronização entre janela e popup.
-- **Popup revisado:** borda completa, estados de trabalho, foco visível e respeito à redução de movimento. O novo arraste sem ativar a janela foi implementado especificamente para Windows.
-- **Áudio opcional:** manter a transcrição no histórico sem guardar um arquivo de áudio. O salvamento de áudio começa desativado.
-- **Mais tempo para IA local:** endpoints de loopback recebem até 120 segundos; provedores remotos continuam com 20 segundos. Nas falhas tratadas pelo pipeline, o resultado volta à transcrição original e informa o motivo.
-- **Ícones no Windows:** a logo da janela e o ícone da barra de tarefas acompanham a cor selecionada. Isso não altera o tema da barra de tarefas do próprio Windows.
-
-## Modelos pela sua assinatura via CLI
-
-O seletor em **Prompts com IA** oferece **Haiku 5.5 · low pelo Claude Code CLI** e **Luna · low pelo Codex CLI**. Esses modelos rodam nos servidores dos respectivos provedores; o CLI instalado no computador faz a conexão. Não são modelos baixados nem inferência offline.
-
-Antes de selecionar uma opção, instale o [Claude Code oficial](https://code.claude.com/docs/en/setup) ou o [Codex CLI oficial](https://learn.chatgpt.com/docs/cli), abra `claude` ou `codex` no terminal e entre na sua própria conta. Conclua o login no CLI antes de usar o atalho do aplicativo. O app não recebe sua senha nem copia tokens. A conta precisa ter acesso ao modelo; o uso consome sua cota e está sujeito aos limites do plano, sem promessa de gratuidade ou uso ilimitado.
-
-O texto transcrito é enviado ao provedor escolhido. Se faltar o CLI, login, conexão ou cota, o app preserva a transcrição e informa a falha; não troca automaticamente para uma API paga. **Gemini Flash aparece indisponível nesta versão**: o teste do CLI recusou acesso individual e a integração ficou desabilitada, conforme [limitações e validação](docs/CLI-PROMPTS.md).
-
-Os templates geram prompts em prosa, com contexto, requisitos e verificação, evitando rótulos repetidos e formatos de entrega inventados. Você continua podendo editar os templates e escolher os provedores de API ou a alternativa local já existentes.
-
-## Comece a usar
-
-1. Abra o app e baixe um modelo de transcrição compatível com seu idioma, como Whisper.
-2. Em **Prompts com IA**, configure o provedor, o modelo e um template. O projeto oferece IA local e integrações como OpenAI, Groq, OpenRouter, Anthropic e APIs compatíveis.
-3. Confirme os dois atalhos em **Geral**. O modo de ativação é configurável: segurar, alternar ou automático, conforme as opções do app.
-4. Coloque o cursor no aplicativo de destino e use o atalho do modo desejado.
-5. Ajuste tema, cor e **Salvar áudio gravado** nas preferências.
-
-### Atalhos: confira o seu perfil
-
-Os **padrões do código** continuam sendo os do projeto original:
-
-| Ação                           | Windows / Linux         | macOS                     |
-| ------------------------------ | ----------------------- | ------------------------- |
-| Apenas transcrever             | `Ctrl + Espaço`         | `Option + Espaço`         |
-| Transcrever e processar com IA | `Ctrl + Shift + Espaço` | `Option + Shift + Espaço` |
-
-As capturas usam um perfil Windows personalizado com esses dois atalhos invertidos: `Ctrl + Espaço` para **prompt**, `Ctrl + Shift + Espaço` para **ditado**. Essa escolha foi salva nas configurações locais; ela não mudou os padrões do código nem os atalhos dos demais usuários.
-
-## Privacidade e histórico
-
-A transcrição usa os modelos locais. Ao escolher um provedor remoto para pós-processamento, **o texto transcrito é enviado a esse provedor**. Com um servidor de IA local, essa etapa também pode acontecer na máquina; os downloads iniciais de modelos ainda precisam de internet.
-
-**Salvar áudio gravado** está desativado por padrão nesta proposta, inclusive quando uma configuração antiga não possui essa opção. O histórico continua guardando o texto. Sem o áudio, ouvir novamente ou retranscrever aquela entrada não fica disponível. Desativar a opção **não apaga gravações antigas**; elas continuam sujeitas aos controles existentes de histórico e retenção.
-
-Não coloque áudios pessoais, histórico, chaves de API, modelos ou arquivos de configuração do usuário em um PR.
-
-## Compatibilidade: o que foi validado
-
-| Plataforma      | Situação desta contribuição                                                                                                                                                                                           |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Windows x64** | Release compilado, instalador executado e app reaberto. QA de aparência em navegador. Arraste, foco, DPI misto e ícones ainda pedem confirmação visual nativa completa.                                               |
-| **macOS**       | Interface, preferências e pipeline compartilham o código. Build nativo, permissões, colagem, popup e Dock ainda não validados. Não há implementação nova de arraste para macOS.                                       |
-| **Linux**       | Interface, preferências e pipeline compartilham o código. Build nativo, X11/Wayland, atalhos, colagem e comportamento do gerenciador de janelas ainda não validados. Não há implementação nova de arraste para Linux. |
-
-A alteração de `icon.icns` também muda a logo empacotada no macOS. Ícones móveis foram gerados pela ferramenta, mas **não representam suporte a Android/iOS** e são candidatos a ficar fora do PR. A base de empacotamento ainda contém identidade e atualização herdadas do Handy; a publicação precisa da decisão do mantenedor. [Matriz de impacto e plano de contribuição](docs/CONTRIBUTION-REVIEW.md).
-
-## Desenvolvimento
-
-Na raiz de um checkout que contenha esta proposta, instale as dependências descritas em [BUILD.md](BUILD.md): Rust, Bun e as ferramentas nativas da plataforma. O Windows x64 também requer Build Tools C++, CMake, Vulkan SDK e WebView2.
+Precisa de [Rust](https://rustup.rs), [Bun](https://bun.sh), CMake e, no Windows, as Build Tools do Visual Studio (C++) e o Vulkan SDK. Passo a passo por sistema em [BUILD.md](BUILD.md).
 
 ```bash
-bun install --frozen-lockfile
+bun install
+bun run tauri dev                     # desenvolvimento
+bun run tauri build                   # instalador
+cargo test -p vozprompt-core          # testes da lógica nova (rápido)
 ```
 
-Prepare o recurso VAD obrigatório, conforme [AGENTS.md](AGENTS.md):
+No Windows, rode o `cargo` pelo PowerShell ou Prompt de Comando (o Git Bash quebra o CMake).
 
-```bash
-mkdir -p src-tauri/resources/models
-curl -L -o src-tauri/resources/models/silero-vad-v6.2-F32.gguf https://huggingface.co/handy-computer/silero-vad-v6.2-gguf/resolve/main/silero-vad-v6.2-F32.gguf
-```
+## Usando com uma IA
 
-No PowerShell, use `New-Item -ItemType Directory -Force src-tauri/resources/models` e `curl.exe` para o download.
+Cole o prompt de [docs/PROMPT-IA.md](docs/PROMPT-IA.md) no seu assistente para ele ajudar a configurar, usar ou continuar o projeto.
 
-```bash
-bun run dev                # frontend; as funções nativas precisam do Tauri
-bun run tauri dev          # aplicativo desktop
-bun run build              # TypeScript + build da interface
-cargo test --manifest-path src-tauri/Cargo.toml -p vozprompt-core
-```
+## Créditos e licença
 
-Para a variante Windows local desta proposta:
+O IntegraPrompt, de **Willian Daniel**, é um fork do [Handy](https://github.com/cjpais/Handy), de **CJ Pais**, que fornece a gravação, a transcrição local, os atalhos e a colagem. Também usa transcribe.cpp e ggml. Obrigado a todos.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows.ps1 -Action Dev
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows.ps1 -Action Build
-```
-
-Esse script usa `tauri.local-windows.conf.json`, desativa o updater da variante local e produz um instalador NSIS. Ele **não instala sozinho todas as ferramentas nem configura a IA local**. O launcher auxiliar de IA usa diretórios e porta definidos para a instalação local e não é uma integração portátil pronta para distribuição.
-
-### Verificação e prévia visual
-
-```bash
-bun run lint
-bun run check:translations
-bun run format:check
-```
-
-Os dois últimos checks têm pendências registradas na [avaliação](docs/CONTRIBUTION-REVIEW.md). Não trate esta proposta como pronta para merge enquanto elas não forem resolvidas.
-
-Com `bun run dev` ativo, abra `/design-preview.html` para a interface com dados fictícios. `node scripts/qa-appearance.mjs` executa a regressão de aparência; requer Chrome instalado e o servidor em `127.0.0.1:1420`. Essa prévia não executa gravação, colagem ou IA nativa.
-
-## Contribuir com cuidado
-
-A proposta será mais fácil de avaliar em partes: **correção do timeout**, **histórico com áudio opcional** e **interface/aparência**, mantendo o arraste Windows e a documentação em mudanças próprias quando possível. A nova logo é uma proposta sujeita à aceitação do mantenedor.
-
-O [template de PR](.github/PULL_REQUEST_TEMPLATE.md), herdado do Handy e ainda presente neste repositório, pede uma mudança por PR, abertura manual e descrição escrita pelo autor. Este checkout não abriu PR, não criou release e não foi enviado ao GitHub.
-
-- [Avaliação técnica e próximos passos](docs/CONTRIBUTION-REVIEW.md)
-- [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Pendências do projeto](docs/PENDENCIAS.md)
-- [Guia para usar com um assistente de IA](docs/PROMPT-IA.md)
-- [Proveniência e reprodução das imagens](docs/media/README.md)
-
-## Licença e créditos
-
-[MIT](LICENSE). Copyright © 2025 **CJ Pais** e © 2026 **Willian Daniel**, conforme a licença existente. A contribuição visual e as adaptações propostas não substituem a autoria do projeto original. Assistência de desenvolvimento e documentação: Codex.
+Licença MIT, com o copyright do Handy preservado. Veja [LICENSE](LICENSE). Contribuições: [CONTRIBUTING.md](CONTRIBUTING.md).

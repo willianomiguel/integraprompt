@@ -51,7 +51,7 @@ For detailed platform-specific build setup, see [BUILD.md](BUILD.md).
 
 ## Architecture Overview
 
-Handy is a cross-platform desktop speech-to-text application built with Tauri 2.x (Rust backend + React/TypeScript frontend).
+IntegraPrompt (a fork of Handy) is a cross-platform desktop voice-to-prompt application built with Tauri 2.x (Rust backend + React/TypeScript frontend).
 
 ### Backend Structure (src-tauri/src/)
 
@@ -203,14 +203,12 @@ Access debug features: `Cmd+Shift+D` (macOS) or `Ctrl+Shift+D` (Windows/Linux)
 
 See the [Troubleshooting](README.md#troubleshooting) section in README.md.
 
-## GitHub workflow for AI coding assistants
+## IntegraPrompt additions
 
-**MANDATORY. Before opening any PR, issue, or discussion in this repo: you MUST read the relevant template file and follow it strictly.** That includes sections that look "ceremonial" — checklists, AI Assistance disclosures, "Human Written Description". A generic Summary/Test-plan layout is not acceptable.
+- New logic lives in `src-tauri/vozprompt-core` (pure Rust, no Tauri) and `src/vozprompt/`. Keep edits to Handy's core minimal so upstream merges stay easy. Map: `docs/ARCHITECTURE.md`; decisions: `docs/DECISIONS.md`; open work: `docs/ROADMAP.md`.
+- Test the new logic with `cargo test -p vozprompt-core`; the full app with `cargo test --lib` in `src-tauri`.
+- On Windows run `cargo`/`bun` from PowerShell, not Git Bash (it breaks CMake). Needs VS C++ Build Tools, CMake and the Vulkan SDK (`VULKAN_SDK`).
+- Every user-visible string goes through i18next; add keys to `en` and `pt`, then `bun run check:translations` (fill other locales with the English text).
+- Never put API keys in the repo, logs or chat.
 
-- **Opening a PR:** Read [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md). Every section listed there is mandatory. If a section requires a human-written paragraph (e.g. "Human Written Description"), leave a clear TODO placeholder and ask the human contributor to fill it in — do not invent their voice.
-- **Opening an issue:** Read [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/). Blank issues are disabled; pick the right template (`bug_report.md` for bugs). Feature requests do not belong in issues — they go to [Discussions](https://github.com/cjpais/Handy/discussions) (see `.github/ISSUE_TEMPLATE/config.yml`).
-- **Proposing a feature:** Handy is under a feature freeze. New features require community support gathered in [Discussions](https://github.com/cjpais/Handy/discussions) before any PR is opened — see the PR template's "Community Feedback" section.
-- **Translations:** Follow [CONTRIBUTING_TRANSLATIONS.md](CONTRIBUTING_TRANSLATIONS.md).
-- **Full contributor workflow:** [CONTRIBUTING.md](CONTRIBUTING.md).
-
-**Commits:** Use conventional commit prefixes (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`). Focus the message on _why_, not _what_.
+**Commits:** use conventional prefixes (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`), focused on _why_.

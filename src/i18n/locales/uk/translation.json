@@ -28,7 +28,7 @@
     "customModelDescription": "Офіційно не підтримується",
     "migration": {
       "title": "Ваші моделі потребують оновлення",
-      "description": "Handy тепер використовує моделі нового типу. Завантажте нову версію, щоб і далі транскрибувати. Старі версії буде видалено.",
+      "description": "IntegraPrompt тепер використовує моделі нового типу. Завантажте нову версію, щоб і далі транскрибувати. Старі версії буде видалено.",
       "replaces": "Замінює {{name}}",
       "oldFormat": "Старий формат",
       "failed": "Помилка завантаження",
@@ -69,7 +69,7 @@
     },
     "permissions": {
       "title": "Потрібні дозволи",
-      "description": "Handy потребує деяких дозволів для коректної роботи.",
+      "description": "IntegraPrompt потребує деяких дозволів для коректної роботи.",
       "microphone": {
         "title": "Доступ до мікрофона",
         "description": "Потрібен для прослуховування вашого голосу для транскрипції."
@@ -181,7 +181,7 @@
       "deleteActiveConfirm": "{{modelName}} — ваша активна модель. Видалення зупинить транскрипцію, доки ви не оберете нову модель. Ви впевнені?",
       "deleteTitle": "Видалити модель",
       "retiredNotice": {
-        "title": "Старі моделі більше не працюють з Handy",
+        "title": "Старі моделі більше не працюють з IntegraPrompt",
         "description": "Вони займають {{size}} на вашому комп'ютері.",
         "delete": "Видалити моделі",
         "deleted": "Старі моделі видалено",
@@ -198,7 +198,7 @@
       "searchPlaceholder": "Пошук моделей за назвою…",
       "rescan": {
         "label": "Пересканувати",
-        "tooltip": "Пересканувати моделі, додані до папки моделей або кешу Hugging Face поза межами Handy"
+        "tooltip": "Пересканувати моделі, додані до папки моделей або кешу Hugging Face поза межами IntegraPrompt"
       }
     },
     "sound": {
@@ -261,11 +261,11 @@
       },
       "autostart": {
         "label": "Запуск при старті системи",
-        "description": "Автоматично запускати Handy при вході в систему"
+        "description": "Автоматично запускати IntegraPrompt при вході в систему"
       },
       "showTrayIcon": {
         "label": "Показати значок у треї",
-        "description": "Відображати значок Handy у системному треї."
+        "description": "Відображати значок IntegraPrompt у системному треї."
       },
       "overlay": {
         "style": {
@@ -489,7 +489,7 @@
       },
       "updateChecks": {
         "label": "Перевірка оновлень",
-        "description": "Автоматично перевіряти наявність нових версій Handy",
+        "description": "Автоматично перевіряти наявність нових версій IntegraPrompt",
         "lockedDescription": "Вимкнено системною конфігурацією (HANDY_DISABLE_UPDATER)"
       },
       "soundTheme": {
@@ -567,7 +567,7 @@
       },
       "keyboardDiagnostic": {
         "title": "Діагностика клавіатури",
-        "description": "Перевіряє, чи доходять події клавіатури до Handy. Записується лише кількість подій — ніколи те, які клавіші ви натискаєте.",
+        "description": "Перевіряє, чи доходять події клавіатури до IntegraPrompt. Записується лише кількість подій — ніколи те, які клавіші ви натискаєте.",
         "run": "Запустити 10-секундну діагностику",
         "running": "Прослуховування… натисніть свою комбінацію кілька разів (наприклад, Option+Space)",
         "secureInputLabel": "Secure Input",
@@ -581,7 +581,7 @@
         "mouse": "Миша",
         "verdictBlocked": "Secure Input блокує події клавіш — комбінації зі звичайною клавішею не працюватимуть, доки це не буде усунуто.",
         "verdictSuspicious": "Події модифікаторів надходять, а події клавіш — ні: щось пригнічує клавіші, хоча Secure Input позначено як вимкнений. Будь ласка, повідомте про це на GitHub.",
-        "verdictOk": "Події клавіш надходять до Handy нормально.",
+        "verdictOk": "Події клавіш надходять до IntegraPrompt нормально.",
         "verdictNoEvents": "Подій не зафіксовано — ви натискали клавіші під час тесту?",
         "failed": "Не вдалося виконати діагностику: {{error}}"
       },
@@ -604,11 +604,11 @@
       "title": "Інфо",
       "version": {
         "title": "Версія",
-        "description": "Поточна версія Handy"
+        "description": "Поточна версія IntegraPrompt"
       },
       "appDataDirectory": {
         "title": "Папка даних програми",
-        "description": "Розташування даних Handy"
+        "description": "Розташування даних IntegraPrompt"
       },
       "sourceCode": {
         "title": "Вихідний код",
@@ -616,21 +616,21 @@
         "button": "Переглянути на GitHub"
       },
       "supportDevelopment": {
-        "title": "Підтримати розробку",
-        "description": "Допоможіть нам продовжувати розвивати Handy",
-        "button": "Підтримати"
+        "title": "Based on Handy",
+        "description": "IntegraPrompt is a fork of Handy by CJ Pais (MIT license)",
+        "button": "View Handy"
       },
       "acknowledgments": {
         "title": "Подяки",
         "ggml": {
           "title": "ggml",
           "description": "Високопродуктивний інференс моделі автоматичного розпізнавання мовлення Whisper від OpenAI",
-          "details": "Handy використовує ggml для швидкої локальної обробки мовлення в текст. Дякуємо за чудову роботу Георгію Герганову та контриб'юторам."
+          "details": "IntegraPrompt використовує ggml для швидкої локальної обробки мовлення в текст. Дякуємо за чудову роботу Георгію Герганову та контриб'юторам."
         }
       },
       "whatsNewUpdates": {
         "label": "Показувати новини",
-        "description": "Показувати примітки до випуску після оновлень Handy"
+        "description": "Показувати примітки до випуску після оновлень IntegraPrompt"
       }
     }
   },
@@ -660,7 +660,7 @@
     "noOptionsFound": "Опцій не знайдено"
   },
   "accessibility": {
-    "permissionsDescription": "Handy потребує дозволи доступності для введення транскрибованого тексту.",
+    "permissionsDescription": "IntegraPrompt потребує дозволи доступності для введення транскрибованого тексту.",
     "openSettings": "Відкрити Системні налаштування"
   },
   "errors": {
@@ -703,11 +703,11 @@
   },
   "appLanguage": {
     "title": "Мова інтерфейсу",
-    "description": "Змінити мову інтерфейсу Handy"
+    "description": "Змінити мову інтерфейсу IntegraPrompt"
   },
   "theme": {
     "title": "Тема застосунку",
-    "description": "Виберіть, чи має Handy слідувати темі системи, чи залишатися світлою або темною",
+    "description": "Виберіть, чи має IntegraPrompt слідувати темі системи, чи залишатися світлою або темною",
     "options": {
       "system": "Системна",
       "light": "Світла",
@@ -720,7 +720,7 @@
     "loadingModel": "Завантаження моделі..."
   },
   "whatsNew": {
-    "title": "Нове в Handy v{{version}}"
+    "title": "Нове в IntegraPrompt v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} може блокувати 1 комбінацію клавіш",
