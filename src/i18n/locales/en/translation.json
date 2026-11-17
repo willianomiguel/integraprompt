@@ -477,7 +477,7 @@
       "cli": {
         "title": "Use your AI CLI",
         "description": "Choose a model to turn speech into a prompt. Uses your official CLI login and account allowance; usage is not unlimited. Text is sent to the selected provider.",
-        "login": "First install the official CLI and sign in by running {{command}} in a terminal. Do not paste passwords or tokens into this app. If login or quota fails, your transcript is preserved. Gemini CLI may retain its own history.",
+        "login": "Sign in to the official CLI with {{command}}. Prompt text is sent to that provider.",
         "geminiUnavailable": "Unavailable: individual CLI access rejected by service during testing"
       }
     },

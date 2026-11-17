@@ -13,6 +13,8 @@ mod commands;
 pub mod engine_supervisor;
 mod helpers;
 mod input;
+#[cfg(target_os = "windows")]
+mod live_caret;
 mod llm_client;
 mod managers;
 mod memory;

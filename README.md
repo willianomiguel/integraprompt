@@ -20,15 +20,17 @@ Para macOS e Linux, por enquanto é preciso [compilar do código](#compilar).
 
 ## Como usar
 
+Veja [Transcri??o ao vivo e interface](docs/LIVE-TRANSCRIPTION.md) para configurar o ditado no cursor e entender quando a GPU antecipa a transcri??o no modo Prompt.
+
 1. Abra o app e baixe um modelo de transcrição (Whisper, Parakeet etc.).
 2. Em **Prompts com IA**, escolha o provedor, o modelo e um modelo de prompt.
 3. Use um dos dois atalhos (configuráveis em **Geral**):
 
-| Atalho | O que faz | Padrão Windows/Linux | Padrão macOS |
-| --- | --- | --- | --- |
-| **Ditado** | Transcreve e cola o texto como foi dito | `Ctrl + Espaço` | `Option + Espaço` |
-| **Prompt** | Transcreve, manda para a IA e cola o prompt pronto | `Ctrl + Shift + Espaço` | `Option + Shift + Espaço` |
-| **Melhorar seleção** | Reescreve o texto selecionado como prompt, no lugar | `Ctrl + Shift + P` | `Option + Shift + P` |
+| Atalho               | O que faz                                           | Padrão Windows/Linux    | Padrão macOS              |
+| -------------------- | --------------------------------------------------- | ----------------------- | ------------------------- |
+| **Ditado**           | Transcreve e cola o texto como foi dito             | `Ctrl + Espaço`         | `Option + Espaço`         |
+| **Prompt**           | Transcreve, manda para a IA e cola o prompt pronto  | `Ctrl + Shift + Espaço` | `Option + Shift + Espaço` |
+| **Melhorar seleção** | Reescreve o texto selecionado como prompt, no lugar | `Ctrl + Shift + P`      | `Option + Shift + P`      |
 
 Você usa **um** atalho por vez. O de Prompt já faz tudo: transcrever e melhorar. **Melhorar seleção** funciona com texto digitado: selecione, aperte o atalho e ele troca o texto pelo prompt (se a IA falhar, o texto fica como estava). Todos precisam de teclas diferentes e podem ser trocados em **Geral**. Atenção: `Ctrl + Shift + P` também é usado por outros programas, como a paleta de comandos do VS Code.
 
@@ -36,12 +38,12 @@ Se a IA falhar (sem internet, chave inválida, demora demais), o app cola a **tr
 
 ## Provedores de IA
 
-| Opção | Precisa de | Observação |
-| --- | --- | --- |
-| **Local (offline)** | Download único de ~1,1 GB | IA pequena (Qwen2.5 1.5B) no seu PC, sem internet nem chave |
-| **Claude Code / Codex (CLI)** | CLI oficial instalado e logado | Usa a sua assinatura. Leva uns 6 s. Detalhes em [docs/CLI-PROMPTS.md](docs/CLI-PROMPTS.md) |
-| **OpenAI, Anthropic, Groq, OpenRouter** | Chave de API | Respostas em 1 a 2 s |
-| **Custom** | URL de uma API compatível com OpenAI | Funciona com Ollama (`http://localhost:11434/v1`) |
+| Opção                                   | Precisa de                           | Observação                                                                                 |
+| --------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| **Local (offline)**                     | Download único de ~1,1 GB            | IA pequena (Qwen2.5 1.5B) no seu PC, sem internet nem chave                                |
+| **Claude Code / Codex (CLI)**           | CLI oficial instalado e logado       | Usa a sua assinatura. Leva uns 6 s. Detalhes em [docs/CLI-PROMPTS.md](docs/CLI-PROMPTS.md) |
+| **OpenAI, Anthropic, Groq, OpenRouter** | Chave de API                         | Respostas em 1 a 2 s                                                                       |
+| **Custom**                              | URL de uma API compatível com OpenAI | Funciona com Ollama (`http://localhost:11434/v1`)                                          |
 
 Limite de espera: 20 s para provedores remotos e 120 s para IA local.
 

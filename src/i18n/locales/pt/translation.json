@@ -477,7 +477,7 @@
       "cli": {
         "title": "Use seu CLI de IA",
         "description": "Escolha o modelo para transformar sua fala em prompt. Usa o login do CLI oficial e consome a cota da sua conta; não é ilimitado. O texto será enviado ao provedor escolhido.",
-        "login": "Primeiro, instale o CLI oficial e entre na sua conta executando {{command}} no terminal. Não cole senhas ou tokens neste app. Se o login ou a cota falhar, sua transcrição será preservada. O Gemini CLI pode manter histórico próprio.",
+        "login": "Entre no CLI oficial com {{command}}. O texto do prompt é enviado a esse provedor.",
         "geminiUnavailable": "Indisponível: acesso individual recusado pelo serviço no teste"
       }
     },

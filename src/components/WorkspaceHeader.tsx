@@ -21,13 +21,7 @@ export function WorkspaceHeader({ section }: { section: SidebarSection }) {
   };
   return (
     <header className="workspace-header">
-      <div>
-        <p className="workspace-eyebrow">{t("workspace.eyebrow")}</p>
-        <h1>{t(SECTIONS_CONFIG[section].labelKey)}</h1>
-        <p className="workspace-description">
-          {t(`workspace.sections.${section}`)}
-        </p>
-      </div>
+      <h1 key={section}>{t(SECTIONS_CONFIG[section].labelKey)}</h1>
       <div className="theme-switch" role="group" aria-label={t("theme.title")}>
         {themes.map(({ value, icon: Icon }) => (
           <button

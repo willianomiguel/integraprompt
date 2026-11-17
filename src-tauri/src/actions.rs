@@ -560,8 +560,10 @@ impl ShortcutAction for TranscribeAction {
             streaming: model_supports_streaming,
             long_form: false,
         };
+        #[cfg(target_os = "windows")]
+        tm.take_live_caret();
         if live_decode(expected_model, settings.long_form_chunking) != LiveDecode::None {
-            tm.start_stream();
+            tm.start_stream(self.post_process);
         }
         let plan_elapsed = plan_started.elapsed();
 
@@ -853,6 +855,8 @@ impl ShortcutAction for TranscribeAction {
                                 let ah_clone = ah.clone();
                                 let paste_time = Instant::now();
                                 let final_text = processed.final_text;
+                                #[cfg(target_os = "windows")]
+                                let mut live_caret = tm.take_live_caret();
                                 let rm_for_paste = Arc::clone(&rm);
                                 // Taken before the paste thread exists, and so
                                 // before the next session can start.
@@ -872,7 +876,16 @@ impl ShortcutAction for TranscribeAction {
                                             return;
                                         }
 
-                                        match utils::paste(final_text, ah_clone.clone()) {
+                                        #[cfg(target_os = "windows")]
+                                        let live_result = live_caret
+                                            .as_mut()
+                                            .and_then(|caret| caret.finish(&final_text));
+                                        #[cfg(not(target_os = "windows"))]
+                                        let live_result: Option<Result<(), String>> = None;
+                                        let paste_result = live_result.unwrap_or_else(|| {
+                                            utils::paste(final_text, ah_clone.clone())
+                                        });
+                                        match paste_result {
                                             Ok(()) => debug!(
                                                 "Text pasted successfully in {:?}",
                                                 paste_time.elapsed()
