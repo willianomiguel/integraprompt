@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { RefreshCcw } from "lucide-react";
+import { ChevronDown, RefreshCcw } from "lucide-react";
 import { commands, type PostProcessApiFormat } from "@/bindings";
 
 import { Alert } from "../../ui/Alert";
@@ -43,57 +43,9 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
-  const cliChoices = [
-    {
-      id: "cli_claude",
-      title: "Haiku 5.5",
-      detail: "Claude Code · low",
-      login: "claude",
-    },
-    { id: "cli_codex", title: "Luna", detail: "Codex · low", login: "codex" },
-    {
-      id: "cli_gemini",
-      title: "Gemini Flash",
-      detail: "Gemini CLI · 2.5 Flash",
-      login: "gemini",
-    },
-  ];
 
   return (
     <>
-      <div className="p-4 space-y-3">
-        <p className="font-medium">{t("settings.postProcessing.cli.title")}</p>
-        <p className="text-sm text-text/70">
-          {t("settings.postProcessing.cli.description")}
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          {cliChoices.map((choice) => (
-            <button
-              key={choice.id}
-              type="button"
-              disabled={choice.id === "cli_gemini"}
-              aria-pressed={state.selectedProviderId === choice.id}
-              onClick={() => state.handleProviderSelect(choice.id)}
-              className={`rounded-lg border p-3 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${state.selectedProviderId === choice.id ? "border-primary bg-primary/10" : "border-mid-gray/30 hover:bg-mid-gray/10"}`}
-            >
-              <span className="block font-medium">{choice.title}</span>
-              <span className="block text-xs text-text/70 mt-1">
-                {choice.id === "cli_gemini"
-                  ? t("settings.postProcessing.cli.geminiUnavailable")
-                  : choice.detail}
-              </span>
-            </button>
-          ))}
-        </div>
-        {isCli && (
-          <p className="text-sm text-text/70">
-            {t("settings.postProcessing.cli.login", {
-              command: cliChoices.find((c) => c.id === state.selectedProviderId)
-                ?.login,
-            })}
-          </p>
-        )}
-      </div>
       <SettingContainer
         title={t("settings.postProcessing.api.provider.title")}
         description={t("settings.postProcessing.api.provider.description")}
@@ -110,7 +62,14 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
         </div>
       </SettingContainer>
 
-      {isCli ? null : state.selectedProviderId === "local" ? (
+      {isCli ? (
+        <p className="px-4 pb-3 text-xs text-text/70">
+          {t("settings.postProcessing.cli.login", {
+            command:
+              state.selectedProviderId === "cli_claude" ? "claude" : "codex",
+          })}
+        </p>
+      ) : state.selectedProviderId === "local" ? (
         <LocalAiPanel />
       ) : state.isAppleProvider ? (
         state.appleIntelligenceUnavailable ? (
@@ -174,7 +133,7 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                       : t("settings.postProcessing.api.baseUrl.placeholder")
                   }
                   disabled={state.isBaseUrlUpdating}
-                  className="min-w-[380px]"
+                  className="w-full min-w-0"
                 />
               </div>
             </SettingContainer>
@@ -197,7 +156,7 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                 )}
                 variant="compact"
                 disabled={state.isApiKeyUpdating}
-                className="flex-1 min-w-[320px]"
+                className="flex-1 min-w-0"
               />
             </div>
           </SettingContainer>
@@ -226,7 +185,7 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                 "settings.postProcessing.api.model.placeholderNoOptions",
               )}
               variant="compact"
-              className="flex-1 min-w-[380px]"
+              className="flex-1 min-w-0"
             />
             <datalist id="post-process-model-options">
               {state.modelOptions.map((option) => (
@@ -574,9 +533,19 @@ export const PostProcessingSettings: React.FC = () => {
         <PostProcessingSettingsApi />
       </SettingsGroup>
 
-      <SettingsGroup title={t("settings.postProcessing.prompts.title")}>
-        <PostProcessingSettingsPrompts />
-      </SettingsGroup>
+      <details className="prompt-disclosure group">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-1 py-2 text-sm font-medium">
+          {t("settings.postProcessing.prompts.title")}
+          <ChevronDown
+            size={16}
+            aria-hidden="true"
+            className="transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+          />
+        </summary>
+        <div className="mt-2 overflow-hidden rounded-xl border border-mid-gray/30">
+          <PostProcessingSettingsPrompts />
+        </div>
+      </details>
     </div>
   );
 };

@@ -96,7 +96,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <nav className="workspace-sidebar" aria-label={t("workspace.navigation")}>
       <div className="workspace-brand">
         <HandyTextLogo width={140} />
-        <span>{t("workspace.brandCaption")}</span>
       </div>
       <div className="workspace-nav">
         {availableSections.map((section) => {
@@ -127,10 +126,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           );
         })}
-      </div>
-      <div className="workspace-sidebar-note">
-        <span className="workspace-dot" />
-        {t("workspace.sidebarNote")}
       </div>
     </nav>
   );

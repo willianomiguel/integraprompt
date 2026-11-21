@@ -20,15 +20,17 @@ On macOS and Linux you currently need to [build from source](#build).
 
 ## Usage
 
+See [live transcription and workspace changes](docs/LIVE-TRANSCRIPTION.md) for Windows caret dictation and GPU prompt preparation.
+
 1. Open the app and download a transcription model (Whisper, Parakeet, etc.).
 2. In **AI prompts**, pick the provider, the model and a prompt template.
 3. Use one of the two shortcuts (configurable in **General**):
 
-| Shortcut | What it does | Windows/Linux default | macOS default |
-| --- | --- | --- | --- |
-| **Dictation** | Transcribes and pastes the text as spoken | `Ctrl + Space` | `Option + Space` |
-| **Prompt** | Transcribes, sends to the AI and pastes the finished prompt | `Ctrl + Shift + Space` | `Option + Shift + Space` |
-| **Improve selection** | Rewrites the selected text as a prompt, in place | `Ctrl + Shift + P` | `Option + Shift + P` |
+| Shortcut              | What it does                                                | Windows/Linux default  | macOS default            |
+| --------------------- | ----------------------------------------------------------- | ---------------------- | ------------------------ |
+| **Dictation**         | Transcribes and pastes the text as spoken                   | `Ctrl + Space`         | `Option + Space`         |
+| **Prompt**            | Transcribes, sends to the AI and pastes the finished prompt | `Ctrl + Shift + Space` | `Option + Shift + Space` |
+| **Improve selection** | Rewrites the selected text as a prompt, in place            | `Ctrl + Shift + P`     | `Option + Shift + P`     |
 
 Use **one** shortcut at a time. Prompt already does everything: transcribe and improve. **Improve selection** works on typed text: select it, press the shortcut and it is replaced by the prompt (if the AI fails, your text stays as it was). All shortcuts need different keys and can be changed in **General**. Note: `Ctrl + Shift + P` is also used by other programs, such as the VS Code command palette.
 
@@ -36,12 +38,12 @@ If the AI fails (offline, bad key, too slow), the app pastes the **original tran
 
 ## AI providers
 
-| Option | Needs | Notes |
-| --- | --- | --- |
-| **Local (offline)** | One-time ~1.1 GB download | Small AI (Qwen2.5 1.5B) on your PC, no internet or key |
-| **Claude Code / Codex (CLI)** | Official CLI installed and signed in | Uses your subscription. Takes about 6 s. See [docs/CLI-PROMPTS.md](docs/CLI-PROMPTS.md) |
-| **OpenAI, Anthropic, Groq, OpenRouter** | API key | 1 to 2 s responses |
-| **Custom** | URL of an OpenAI-compatible API | Works with Ollama (`http://localhost:11434/v1`) |
+| Option                                  | Needs                                | Notes                                                                                   |
+| --------------------------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
+| **Local (offline)**                     | One-time ~1.1 GB download            | Small AI (Qwen2.5 1.5B) on your PC, no internet or key                                  |
+| **Claude Code / Codex (CLI)**           | Official CLI installed and signed in | Uses your subscription. Takes about 6 s. See [docs/CLI-PROMPTS.md](docs/CLI-PROMPTS.md) |
+| **OpenAI, Anthropic, Groq, OpenRouter** | API key                              | 1 to 2 s responses                                                                      |
+| **Custom**                              | URL of an OpenAI-compatible API      | Works with Ollama (`http://localhost:11434/v1`)                                         |
 
 Timeout: 20 s for remote providers, 120 s for the local AI.
 

@@ -263,6 +263,8 @@ pub struct TranscriptionManager {
     /// yet. This prevents a second worker from starting after finalize/cancel
     /// closes the router but before the first worker has fully exited.
     active_stream_worker: Arc<AtomicU64>,
+    #[cfg(target_os = "windows")]
+    live_caret: Arc<Mutex<Option<crate::live_caret::LiveCaret>>>,
 }
 
 impl TranscriptionManager {
@@ -282,6 +284,8 @@ impl TranscriptionManager {
             stream_active: Arc::new(AtomicBool::new(false)),
             next_stream_worker_id: Arc::new(AtomicU64::new(1)),
             active_stream_worker: Arc::new(AtomicU64::new(0)),
+            #[cfg(target_os = "windows")]
+            live_caret: Arc::new(Mutex::new(None)),
         };
 
         // Start the idle watcher
@@ -726,7 +730,7 @@ impl TranscriptionManager {
     /// worker idles until finalize/cancel and reports `None` so the caller
     /// falls back to batch transcription. Frames sent before the decode begins
     /// queue on the channel and are not lost.
-    pub fn start_stream(&self) {
+    pub fn start_stream(&self, post_process: bool) {
         if self.router.is_open() || self.active_stream_worker.load(Ordering::Acquire) != 0 {
             warn!("start_stream called while a stream worker is already active");
             return;
@@ -740,11 +744,20 @@ impl TranscriptionManager {
             warn!("start_stream lost a race with another stream worker");
             return;
         }
+        #[cfg(target_os = "windows")]
+        if let Ok(mut caret) = self.live_caret.lock() {
+            let settings = get_settings(&self.app_handle);
+            *caret = (!post_process
+                && settings.paste_method == crate::settings::PasteMethod::Direct
+                && settings.overlay_style == crate::settings::OverlayStyle::Live)
+                .then(crate::live_caret::LiveCaret::capture)
+                .flatten();
+        }
         let (rx, cancelled) = self.router.open();
         self.stream_active.store(false, Ordering::Release);
 
         let manager = self.clone();
-        thread::spawn(move || manager.run_stream_worker(rx, cancelled, worker_id));
+        thread::spawn(move || manager.run_stream_worker(rx, cancelled, worker_id, post_process));
     }
 
     fn run_stream_worker(
@@ -752,6 +765,7 @@ impl TranscriptionManager {
         rx: mpsc::Receiver<StreamCmd>,
         cancelled: Arc<AtomicBool>,
         worker_id: u64,
+        post_process: bool,
     ) {
         let _worker = StreamWorkerGuard {
             worker_id,
@@ -793,10 +807,12 @@ impl TranscriptionManager {
             caps.supports_translate,
             caps.languages,
         );
-        let mode = live_decode(
-            ModelTraits::of(&info),
-            get_settings(&self.app_handle).long_form_chunking,
-        );
+        let mut traits = ModelTraits::of(&info);
+        // Reuse the pause-aware long-form splitter for GPU prompt recordings.
+        if post_process && info.on_gpu {
+            traits.long_form = false;
+        }
+        let mode = live_decode(traits, get_settings(&self.app_handle).long_form_chunking);
         let Some(mut session) = LiveSession::begin(self, mode, &info, &model_id) else {
             // Nothing to decode live: the recording is transcribed in batch.
             self.router.clear();
@@ -856,9 +872,16 @@ impl TranscriptionManager {
         }
     }
 
+    #[cfg(target_os = "windows")]
+    pub(crate) fn take_live_caret(&self) -> Option<crate::live_caret::LiveCaret> {
+        self.live_caret.lock().ok()?.take()
+    }
+
     /// Abandon any live decode without producing text (e.g. on cancel). A
     /// chunk already decoding finishes; audio queued behind it is dropped.
     pub fn cancel_stream(&self) {
+        #[cfg(target_os = "windows")]
+        self.take_live_caret();
         if let Some(route) = self.router.take() {
             route.cancelled.store(true, Ordering::Release);
             let _ = route.tx.send(StreamCmd::Cancel);

@@ -153,6 +153,12 @@ impl<'a> StreamSession<'a> {
             let perf = Arc::clone(&perf);
             let app_handle = tm.app_handle.clone();
             let languages = setup.languages.clone();
+            #[cfg(target_os = "windows")]
+            let (live_caret, active_worker, worker_id) = (
+                tm.live_caret.clone(),
+                tm.active_stream_worker.clone(),
+                tm.active_stream_worker.load(Ordering::Acquire),
+            );
             let mut preview_script = PreviewScript::new(settings.chinese_script, &output_language);
             move |progress: StreamProgress| {
                 let mut perf = lock_perf(&perf);
@@ -163,6 +169,14 @@ impl<'a> StreamSession<'a> {
                     let (committed, tentative) =
                         preview_script.convert(&text.committed, &text.tentative, &languages);
                     emit_stream_text(&app_handle, &committed, &tentative);
+                    #[cfg(target_os = "windows")]
+                    if let Ok(mut caret) = live_caret.lock() {
+                        if active_worker.load(Ordering::Acquire) == worker_id {
+                            if let Some(caret) = caret.as_mut() {
+                                caret.write(&committed);
+                            }
+                        }
+                    }
                 }
                 perf.maybe_log();
             }
